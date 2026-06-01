@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ja" data-page="quest">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>retbareHUB | クエスト</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="ambient-bg" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="./index.html">
+      <span class="brand-cube">rH</span>
+      <span>
+        <strong>retbareHUB</strong>
+        <small>retbare fan site</small>
+      </span>
+    </a>
+
+    <nav class="site-nav" aria-label="メインナビ">
+      <a href="./index.html" data-page="home">ホーム</a>
+      <a href="./news.html" data-page="news">お知らせ</a>
+      <a href="./quest.html" data-page="quest">クエスト</a>
+      <a href="./profile.html" data-page="profile">プロフィール</a>
+      <a href="./rules.html" data-page="rules">ニュース/ルール</a>
+    </nav>
+
+    <div class="header-status">
+      <span id="currentMcidPill">MCID未設定</span>
+      <span id="pointPill">0P</span>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="page-intro">
+      <p class="eyebrow">Retbare Quest Log</p>
+      <h1>クエスト一覧</h1>
+      <p>遊びのきっかけになる小さな目標を、やわらかく並べています。</p>
+    </section>
+
+    <section class="section-block">
+      <div id="questList" class="quest-board"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>retbareHUB</span>
+    <span>Quest board</span>
+  </footer>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-storage-compat.js"></script>
+  <script src="./firebase.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
