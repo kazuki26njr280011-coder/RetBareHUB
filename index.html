@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ja" data-page="home">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>retbareHUB | ホーム</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="ambient-bg" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="./index.html">
+      <span class="brand-cube">rH</span>
+      <span>
+        <strong>retbareHUB</strong>
+        <small>retbare fan site</small>
+      </span>
+    </a>
+
+    <nav class="site-nav" aria-label="メインナビ">
+      <a href="./index.html" data-page="home">ホーム</a>
+      <a href="./news.html" data-page="news">お知らせ</a>
+      <a href="./quest.html" data-page="quest">クエスト</a>
+      <a href="./profile.html" data-page="profile">プロフィール</a>
+      <a href="./rules.html" data-page="rules">ニュース/ルール</a>
+    </nav>
+
+    <div class="header-status">
+      <span id="currentMcidPill">MCID未設定</span>
+      <span id="pointPill">0P</span>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero-card">
+      <div class="hero-copy">
+        <p class="eyebrow">Minecraft Server Fan Hub</p>
+        <h1>retbareの毎日を、<br>やさしく集める場所。</h1>
+        <p>
+          お知らせ、クエスト、プロフィール、RetbareHubPoint、そして時々あらわれる亀。
+          みんなの小さな出来事を、手帳みたいに残していくファンサイトです。
+        </p>
+        <div class="hero-actions">
+          <button class="hub-button" data-profile-jump>プロフィールを開く</button>
+          <a class="hub-button secondary" href="./rules.html">ルールを見る</a>
+        </div>
+      </div>
+      <div class="hero-ornament" aria-hidden="true">
+        <div class="floating-block block-a"></div>
+        <div class="floating-block block-b"></div>
+        <div class="floating-block block-c"></div>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-title">
+        <span>News</span>
+        <h2>最新お知らせ</h2>
+      </div>
+      <div id="homeNews" class="card-grid"></div>
+    </section>
+
+    <section class="section-block two-columns">
+      <div>
+        <div class="section-title">
+          <span>Players</span>
+          <h2>新しい参加者</h2>
+        </div>
+        <div id="homePlayers" class="player-row"></div>
+      </div>
+
+      <div>
+        <div class="section-title">
+          <span>Summary</span>
+          <h2>ニュース要約</h2>
+        </div>
+        <div id="homeSummary" class="soft-card summary-card"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>retbareHUB</span>
+    <span>Made with warm blocks.</span>
+  </footer>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-storage-compat.js"></script>
+  <script src="./firebase.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
