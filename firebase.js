@@ -2,16 +2,16 @@
   "use strict";
 
   /*
-    Firebase Consoleで取得した firebaseConfig をここに貼ります。
-    下の PASTE_... を全部、本物の値に置き換えてください。
+    Firebase Console から取得した firebaseConfig
+    以下の値は実際の設定値です。そのまま使えます。
   */
   const firebaseConfig = {
-    apiKey: "PASTE_YOUR_API_KEY",
-    authDomain: "PASTE_YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "PASTE_YOUR_PROJECT_ID",
-    storageBucket: "PASTE_YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID",
-    appId: "PASTE_YOUR_APP_ID"
+    apiKey: "AIzaSyBOyiUwwFROuDAXlJrNorbKs2GvE4SbVx8",
+    authDomain: "retbarehub.firebaseapp.com",
+    projectId: "retbarehub",
+    storageBucket: "retbarehub.firebasestorage.app",
+    messagingSenderId: "794205547266",
+    appId: "1:794205547266:web:12b716c131e6eb02d4701b"
   };
 
   window.RH = window.RH || {};
@@ -52,6 +52,10 @@
     window.RH.arrayUnion = function (value) {
       return firebase.firestore.FieldValue.arrayUnion(value);
     };
+
+    console.log("✓ Firebase initialized successfully");
+    console.log("✓ Firestore ready");
+    console.log("✓ Storage ready");
   } catch (error) {
     window.RH.firebaseReady = false;
     console.error("Firebase初期化エラー:", error);
