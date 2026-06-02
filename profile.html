@@ -6,8 +6,8 @@
   <title>retbareHUB | プロフィール</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css">
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css?v=4">
 </head>
 <body>
   <div class="ambient-bg" aria-hidden="true"></div>
@@ -17,11 +17,11 @@
       <span class="brand-cube">rH</span>
       <span>
         <strong>retbareHUB</strong>
-        <small>retbare fan site</small>
+        <small>Survival & PVP Server</small>
       </span>
     </a>
 
-    <nav class="site-nav" aria-label="メインナビ">
+    <nav class="site-nav">
       <a href="./index.html" data-page="home">ホーム</a>
       <a href="./news.html" data-page="news">お知らせ</a>
       <a href="./quest.html" data-page="quest">クエスト</a>
@@ -30,7 +30,7 @@
     </nav>
 
     <div class="header-status">
-      <span id="currentMcidPill">MCID未設定</span>
+      <span id="currentMcidPill">未ログイン</span>
       <span id="pointPill">0P</span>
     </div>
   </header>
@@ -39,33 +39,122 @@
     <section class="page-intro">
       <p class="eyebrow">Retbare Profile</p>
       <h1>プロフィール</h1>
-      <p>MCIDを入れると、スキン顔・コメント・タイトル・エフェクト・曲を表示します。</p>
+      <p>
+        まずアカウント作成またはログイン。
+        他の人のプロフィールは検索すると、背景がぼやけて中央に表示されます。
+      </p>
     </section>
 
-    <section class="profile-search soft-card">
-      <label for="mcidInput">MCID</label>
-      <div class="search-line">
-        <input id="mcidInput" type="text" placeholder="例: Retaru46" maxlength="16" autocomplete="off">
-        <button id="loadProfileBtn" class="hub-button">開く</button>
+    <section id="authBox" class="auth-card">
+      <div>
+        <p class="eyebrow">Login</p>
+        <h2>ログイン / アカウント作成</h2>
+        <p class="hint">
+          User名はMinecraft IDです。検索だけではログインされません。
+          アカウントが存在しない人のプロフィールは見られません。
+        </p>
       </div>
-      <p class="hint">入力したMCIDはこのブラウザに保存されます。亀クリック時のPoint受け取りにも使います。</p>
-    </section>
 
-    <section id="profileCard" class="profile-card empty">
-      <p>上の入力欄からプロフィールを開いてね。</p>
-    </section>
+      <div class="auth-grid">
+        <label>
+          User名 / MCID
+          <input id="authMcid" type="text" placeholder="例: Retaru46" maxlength="16" autocomplete="off">
+        </label>
 
-    <section id="profileEditor" class="soft-card profile-editor" hidden></section>
+        <label>
+          パスワード
+          <input id="authPassword" type="password" placeholder="パスワード" autocomplete="current-password">
+        </label>
 
-    <section class="section-block">
-      <div class="section-title">
-        <span>Shop</span>
-        <h2>RetbareHubPoint ショップ</h2>
+        <button id="loginBtn" class="hub-button">ログイン</button>
+        <button id="createAccountBtn" class="hub-button secondary">アカウント作成</button>
       </div>
-      <div id="profileShop" class="shop-grid"></div>
+
+      <p class="hint">
+        初期4人は seed init 後、パスワード <strong>12345</strong> でログインできます。
+      </p>
     </section>
 
-    <audio id="profileAudio" preload="auto"></audio>
+    <section id="profileDashboard" hidden>
+      <div class="dashboard-head soft-card">
+        <div>
+          <p class="eyebrow">My Room</p>
+          <h2>自分のプロフィール</h2>
+          <p>ここから一言、背景、アイコンフレーム、パーティクル、ガチャアイテムを編集できます。</p>
+        </div>
+        <div class="dashboard-actions">
+          <button id="openMyProfileBtn" class="hub-button">自分のプロフを見る</button>
+          <button id="logoutBtn" class="hub-button secondary">ログアウト</button>
+        </div>
+      </div>
+
+      <section class="section-block">
+        <div id="ownProfilePreview"></div>
+      </section>
+
+      <section id="profileEditor" class="profile-editor soft-card"></section>
+
+      <section class="section-block">
+        <div class="section-title">
+          <span>Search</span>
+          <h2>他の人のプロフィールを見る</h2>
+        </div>
+
+        <div class="search-panel soft-card">
+          <input id="publicProfileSearch" type="text" placeholder="見たい人のMCIDを入力">
+          <button id="publicProfileSearchBtn" class="hub-button">検索</button>
+        </div>
+
+        <div class="section-title recent-title">
+          <span>Recently Updated</span>
+          <h2>最近更新されたプロフィール欄</h2>
+        </div>
+        <div id="recentProfiles" class="player-row"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-title">
+          <span>Shop</span>
+          <h2>RetbareHubPoint Shop</h2>
+        </div>
+
+        <div class="shop-tabs">
+          <button class="shop-tab is-active" data-shop-filter="particle">パーティクル 40+</button>
+          <button class="shop-tab" data-shop-filter="frame">アイコンフレーム</button>
+          <button class="shop-tab" data-shop-filter="background">背景</button>
+          <button class="shop-tab" data-shop-filter="aura">演出オーラ</button>
+        </div>
+
+        <div id="profileShop" class="shop-grid"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-title">
+          <span>Gacha</span>
+          <h2>にゃんこ大戦争風ガチャ</h2>
+        </div>
+
+        <div class="gacha-layout">
+          <div class="gacha-machine soft-card">
+            <div class="gacha-face">
+              <span>RETBARE</span>
+              <strong>GACHA</strong>
+            </div>
+            <p>30Pで1回。SS、SR、R、そして融合素材が出ます。</p>
+            <button id="rollGachaBtn" class="hub-button">ガチャを回す 30P</button>
+            <div id="lastGachaResult" class="gacha-result"></div>
+          </div>
+
+          <div id="fusionPanel" class="fusion-panel soft-card"></div>
+        </div>
+
+        <div class="section-title recent-title">
+          <span>Collection</span>
+          <h2>所持ガチャアイテム</h2>
+        </div>
+        <div id="gachaCollection" class="gacha-collection"></div>
+      </section>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -73,10 +162,17 @@
     <span>Profile room</span>
   </footer>
 
+  <div id="profileModal" class="profile-modal" hidden>
+    <button class="modal-close" data-close-profile-modal>×</button>
+    <div id="profileModalContent" class="profile-modal-content"></div>
+  </div>
+
+  <audio id="profileAudio" preload="auto"></audio>
+
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-storage-compat.js"></script>
-  <script src="./firebase.js"></script>
-  <script src="./app.js"></script>
+  <script src="./firebase.js?v=4"></script>
+  <script src="./items.js?v=4"></script>
+  <script src="./app.js?v=4"></script>
 </body>
 </html>
