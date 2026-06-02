@@ -6,8 +6,8 @@
   <title>retbareHUB | ホーム</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css">
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css?v=4">
 </head>
 <body>
   <div class="ambient-bg" aria-hidden="true"></div>
@@ -17,11 +17,11 @@
       <span class="brand-cube">rH</span>
       <span>
         <strong>retbareHUB</strong>
-        <small>retbare 公式のクエスト site</small>
+        <small>Survival & PVP Server</small>
       </span>
     </a>
 
-    <nav class="site-nav" aria-label="メインナビ">
+    <nav class="site-nav">
       <a href="./index.html" data-page="home">ホーム</a>
       <a href="./news.html" data-page="news">お知らせ</a>
       <a href="./quest.html" data-page="quest">クエスト</a>
@@ -30,7 +30,7 @@
     </nav>
 
     <div class="header-status">
-      <span id="currentMcidPill">MCID未設定</span>
+      <span id="currentMcidPill">未ログイン</span>
       <span id="pointPill">0P</span>
     </div>
   </header>
@@ -38,17 +38,25 @@
   <main class="page-shell">
     <section class="hero-card">
       <div class="hero-copy">
-        <p class="eyebrow">Minecraft Retbare Hub</p>
-        <h1>retbareの毎日を、<br>やさしく集める場所。</h1>
+        <p class="eyebrow">Minecraft Server</p>
+        <h1>Retbareの毎日を、<br>やさしく集める場所。</h1>
         <p>
-          お知らせ、クエスト、プロフィール、RetbareHubPoint、そして時々あらわれる亀。
-          みんなの小さな出来事を、手帳みたいに残していくファンサイトです。
+          Retbareはサバイバル＆PVPのMinecraftサーバー。
+          プロフィール、Point、亀、ガチャ、装飾をぜんぶまとめた身内HUBです。
         </p>
+
+        <div class="server-ip-card">
+          <span>Server IP</span>
+          <strong>110.67.56.168:25565</strong>
+          <button class="mini-button" data-copy-ip>コピー</button>
+        </div>
+
         <div class="hero-actions">
-          <button class="hub-button" data-profile-jump>プロフィールを開く</button>
+          <a class="hub-button" href="./profile.html">ログイン / プロフィール</a>
           <a class="hub-button secondary" href="./rules.html">ルールを見る</a>
         </div>
       </div>
+
       <div class="hero-ornament" aria-hidden="true">
         <div class="floating-block block-a"></div>
         <div class="floating-block block-b"></div>
@@ -67,31 +75,43 @@
     <section class="section-block two-columns">
       <div>
         <div class="section-title">
-          <span>Players</span>
-          <h2>新しい参加者</h2>
+          <span>Profiles</span>
+          <h2>最近更新されたプロフィール</h2>
         </div>
-        <div id="homePlayers" class="player-row"></div>
+        <div id="homeRecentProfiles" class="player-row"></div>
       </div>
 
       <div>
         <div class="section-title">
-          <span>Summary</span>
-          <h2>ニュース要約</h2>
+          <span>Guide</span>
+          <h2>retbareHUBでできること</h2>
         </div>
-        <div id="homeSummary" class="soft-card summary-card"></div>
+        <div class="soft-card summary-card">
+          <ul class="summary-list">
+            <li><span class="summary-dot"></span><span>アカウント作成して、自分のプロフィールを編集</span></li>
+            <li><span class="summary-dot"></span><span>Pointで背景・フレーム・パーティクルを購入</span></li>
+            <li><span class="summary-dot"></span><span>ガチャで限定プロフィールアイテムをゲット</span></li>
+            <li><span class="summary-dot"></span><span>Admin設置の亀をクリックしてPoint獲得</span></li>
+          </ul>
+        </div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <span>retbareHUB</span>
-    <span>Made with warm blocks.</span>
+    <span>IP: 110.67.56.168:25565</span>
   </footer>
+
+  <div id="profileModal" class="profile-modal" hidden>
+    <button class="modal-close" data-close-profile-modal>×</button>
+    <div id="profileModalContent" class="profile-modal-content"></div>
+  </div>
 
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-storage-compat.js"></script>
-  <script src="./firebase.js"></script>
-  <script src="./app.js"></script>
+  <script src="./firebase.js?v=4"></script>
+  <script src="./items.js?v=4"></script>
+  <script src="./app.js?v=4"></script>
 </body>
 </html>
