@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ja" data-page="chat">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>retbareHUB | retbareChat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css?v=7">
+</head>
+<body>
+  <div class="ambient-bg"></div>
+
+  <header class="site-header">
+    <a class="brand" href="./index.html">
+      <span class="brand-cube">rH</span>
+      <span>
+        <strong>retbareHUB</strong>
+        <small>Survival & PVP Server</small>
+      </span>
+    </a>
+
+    <nav class="site-nav">
+      <a href="./index.html" data-page="home">ホーム</a>
+      <a href="./news.html" data-page="news">お知らせ</a>
+      <a href="./quest.html" data-page="quest">クエスト</a>
+      <a href="./profile.html" data-page="profile">プロフィール</a>
+      <a href="./chat.html" data-page="chat">retbareChat</a>
+      <a href="./rules.html" data-page="rules">ルール</a>
+    </nav>
+
+    <div class="header-status">
+      <span id="currentMcidPill">未ログイン</span>
+      <span id="pointPill">0P</span>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="page-intro">
+      <p class="eyebrow">retbareChat</p>
+      <h1>みんなで話すスレッド</h1>
+      <p>
+        ログインするとスレッド作成と発言ができます。
+        画像添付はなし。テキストだけの軽いチャットです。
+      </p>
+    </section>
+
+    <section id="chatLoginNotice" class="soft-card chat-notice">
+      <p>発言するにはプロフィールページでログインしてください。読むだけなら未ログインでもOKです。</p>
+      <a class="hub-button" href="./profile.html">ログインへ</a>
+    </section>
+
+    <section id="chatCreatePanel" class="soft-card chat-create" hidden>
+      <h2>新しいスレッドを作る</h2>
+      <input id="threadTitleInput" type="text" placeholder="スレッドタイトル">
+      <textarea id="threadFirstMessageInput" placeholder="最初のメッセージ"></textarea>
+      <button id="createThreadBtn" class="hub-button">スレッド作成</button>
+    </section>
+
+    <section class="chat-layout section-block">
+      <aside class="soft-card thread-list-panel">
+        <div class="section-title">
+          <span>Threads</span>
+          <h2>スレッド</h2>
+        </div>
+        <div id="threadList" class="thread-list"></div>
+      </aside>
+
+      <section class="soft-card chat-room-panel">
+        <div id="activeThreadHeader" class="chat-room-header">
+          <h2>スレッドを選んでね</h2>
+          <p>左の一覧から選択します。</p>
+        </div>
+
+        <div id="messageList" class="message-list"></div>
+
+        <div id="messageInputPanel" class="message-input-panel" hidden>
+          <textarea id="messageInput" placeholder="メッセージを書く"></textarea>
+          <button id="sendMessageBtn" class="hub-button">送信</button>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>retbareHUB</span>
+    <span>retbareChat</span>
+  </footer>
+
+  <div id="profileModal" class="profile-modal" hidden>
+    <button class="modal-close" data-close-profile-modal>×</button>
+    <div id="profileModalContent" class="profile-modal-content"></div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <script src="./firebase.js?v=7"></script>
+  <script src="./items.js?v=7"></script>
+  <script src="./app.js?v=7"></script>
+</body>
+</html>
