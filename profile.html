@@ -40,8 +40,8 @@
       <p class="eyebrow">Retbare Profile</p>
       <h1>プロフィール</h1>
       <p>
-        まずアカウント作成またはログイン。
-        他の人のプロフィールは検索すると、背景がぼやけて中央に表示されます。
+        ログインすると自分のプロフィールを編集できます。
+        他の人のプロフィール検索はログインしていなくてもできます。
       </p>
     </section>
 
@@ -49,9 +49,8 @@
       <div>
         <p class="eyebrow">Login</p>
         <h2>ログイン / アカウント作成</h2>
-        <p class="hint">
-          User名はMinecraft IDです。検索だけではログインされません。
-          アカウントが存在しない人のプロフィールは見られません。
+        <p id="authStateLine" class="hint">
+          MCIDとパスワードを入力してください。
         </p>
       </div>
 
@@ -66,13 +65,38 @@
           <input id="authPassword" type="password" placeholder="パスワード" autocomplete="current-password">
         </label>
 
-        <button id="loginBtn" class="hub-button">ログイン</button>
-        <button id="createAccountBtn" class="hub-button secondary">アカウント作成</button>
+        <button id="loginBtn" class="hub-button" type="button">ログイン</button>
+        <button id="createAccountBtn" class="hub-button secondary" type="button">アカウント作成</button>
+      </div>
+
+      <div class="hero-actions" style="margin-top:16px;">
+        <button id="forceLogoutBtn" class="hub-button secondary" type="button">
+          ログイン状態をリセット
+        </button>
       </div>
 
       <p class="hint">
         初期4人は seed init 後、パスワード <strong>12345</strong> でログインできます。
       </p>
+    </section>
+
+    <section class="section-block" id="publicSearchArea">
+      <div class="section-title">
+        <span>Search</span>
+        <h2>他の人のプロフィールを見る</h2>
+      </div>
+
+      <div class="search-panel soft-card">
+        <input id="publicProfileSearch" type="text" placeholder="見たい人のMCIDを入力">
+        <button id="publicProfileSearchBtn" class="hub-button" type="button">検索</button>
+      </div>
+
+      <div class="section-title recent-title">
+        <span>Recently Updated</span>
+        <h2>最近更新されたプロフィール欄</h2>
+      </div>
+
+      <div id="recentProfiles" class="player-row"></div>
     </section>
 
     <section id="profileDashboard" hidden>
@@ -83,8 +107,8 @@
           <p>ここから一言、背景、アイコンフレーム、パーティクル、ガチャアイテムを編集できます。</p>
         </div>
         <div class="dashboard-actions">
-          <button id="openMyProfileBtn" class="hub-button">自分のプロフを見る</button>
-          <button id="logoutBtn" class="hub-button secondary">ログアウト</button>
+          <button id="openMyProfileBtn" class="hub-button" type="button">自分のプロフを見る</button>
+          <button id="logoutBtn" class="hub-button secondary" type="button">ログアウト</button>
         </div>
       </div>
 
@@ -96,33 +120,15 @@
 
       <section class="section-block">
         <div class="section-title">
-          <span>Search</span>
-          <h2>他の人のプロフィールを見る</h2>
-        </div>
-
-        <div class="search-panel soft-card">
-          <input id="publicProfileSearch" type="text" placeholder="見たい人のMCIDを入力">
-          <button id="publicProfileSearchBtn" class="hub-button">検索</button>
-        </div>
-
-        <div class="section-title recent-title">
-          <span>Recently Updated</span>
-          <h2>最近更新されたプロフィール欄</h2>
-        </div>
-        <div id="recentProfiles" class="player-row"></div>
-      </section>
-
-      <section class="section-block">
-        <div class="section-title">
           <span>Shop</span>
           <h2>RetbareHubPoint Shop</h2>
         </div>
 
         <div class="shop-tabs">
-          <button class="shop-tab is-active" data-shop-filter="particle">パーティクル 40+</button>
-          <button class="shop-tab" data-shop-filter="frame">アイコンフレーム</button>
-          <button class="shop-tab" data-shop-filter="background">背景</button>
-          <button class="shop-tab" data-shop-filter="aura">演出オーラ</button>
+          <button class="shop-tab is-active" data-shop-filter="particle" type="button">パーティクル 40+</button>
+          <button class="shop-tab" data-shop-filter="frame" type="button">アイコンフレーム</button>
+          <button class="shop-tab" data-shop-filter="background" type="button">背景</button>
+          <button class="shop-tab" data-shop-filter="aura" type="button">演出オーラ</button>
         </div>
 
         <div id="profileShop" class="shop-grid"></div>
@@ -141,7 +147,7 @@
               <strong>GACHA</strong>
             </div>
             <p>30Pで1回。SS、SR、R、そして融合素材が出ます。</p>
-            <button id="rollGachaBtn" class="hub-button">ガチャを回す 30P</button>
+            <button id="rollGachaBtn" class="hub-button" type="button">ガチャを回す 30P</button>
             <div id="lastGachaResult" class="gacha-result"></div>
           </div>
 
@@ -163,7 +169,7 @@
   </footer>
 
   <div id="profileModal" class="profile-modal" hidden>
-    <button class="modal-close" data-close-profile-modal>×</button>
+    <button class="modal-close" data-close-profile-modal type="button">×</button>
     <div id="profileModalContent" class="profile-modal-content"></div>
   </div>
 
@@ -174,5 +180,6 @@
   <script src="./firebase.js?v=4"></script>
   <script src="./items.js?v=4"></script>
   <script src="./app.js?v=4"></script>
+  <script src="./profile-fix.js?v=1"></script>
 </body>
 </html>
