@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>retbareHUB | ホーム</title>
+  <title>retbareHUB | Home</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css?v=4">
+  <link rel="stylesheet" href="./style.css?v=7">
 </head>
 <body>
-  <div class="ambient-bg" aria-hidden="true"></div>
+  <div class="ambient-bg"></div>
 
   <header class="site-header">
     <a class="brand" href="./index.html">
@@ -26,7 +26,8 @@
       <a href="./news.html" data-page="news">お知らせ</a>
       <a href="./quest.html" data-page="quest">クエスト</a>
       <a href="./profile.html" data-page="profile">プロフィール</a>
-      <a href="./rules.html" data-page="rules">ニュース/ルール</a>
+      <a href="./chat.html" data-page="chat">retbareChat</a>
+      <a href="./rules.html" data-page="rules">ルール</a>
     </nav>
 
     <div class="header-status">
@@ -37,12 +38,12 @@
 
   <main class="page-shell">
     <section class="hero-card">
-      <div class="hero-copy">
+      <div>
         <p class="eyebrow">Minecraft Server</p>
-        <h1>Retbareの情報が、<br>たくさん集まる場所〜！</h1>
+        <h1>Retbareの毎日を、<br>やさしく集める場所。</h1>
         <p>
-          Retbareはサバイバル＆PVPのMinecraftサーバー。
-          プロフィール、Point、亀、ガチャ、装飾をぜんぶまとめた身内HUBです。
+          Retbareはサバイバル＆PVPサーバー。
+          プロフィール、Point、ガチャ、亀、チャットをまとめた身内HUBです。
         </p>
 
         <div class="server-ip-card">
@@ -53,11 +54,11 @@
 
         <div class="hero-actions">
           <a class="hub-button" href="./profile.html">ログイン / プロフィール</a>
-          <a class="hub-button secondary" href="./rules.html">ルールを見る</a>
+          <a class="hub-button secondary" href="./chat.html">retbareChatへ</a>
         </div>
       </div>
 
-      <div class="hero-ornament" aria-hidden="true">
+      <div class="hero-ornament">
         <div class="floating-block block-a"></div>
         <div class="floating-block block-b"></div>
         <div class="floating-block block-c"></div>
@@ -83,17 +84,10 @@
 
       <div>
         <div class="section-title">
-          <span>Guide</span>
-          <h2>retbareHUBでできること</h2>
+          <span>Chat</span>
+          <h2>最近のretbareChat</h2>
         </div>
-        <div class="soft-card summary-card">
-          <ul class="summary-list">
-            <li><span class="summary-dot"></span><span>アカウント作成して、自分のプロフィールを編集</span></li>
-            <li><span class="summary-dot"></span><span>Pointで背景・フレーム・パーティクルを購入</span></li>
-            <li><span class="summary-dot"></span><span>ガチャで限定プロフィールアイテムをゲット</span></li>
-            <li><span class="summary-dot"></span><span>Admin設置の亀をクリックしてPoint獲得</span></li>
-          </ul>
-        </div>
+        <div id="homeChatThreads" class="stack-list small-stack"></div>
       </div>
     </section>
   </main>
@@ -110,8 +104,8 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-  <script src="./firebase.js?v=4"></script>
-  <script src="./items.js?v=4"></script>
-  <script src="./app.js?v=4"></script>
+  <script src="./firebase.js?v=7"></script>
+  <script src="./items.js?v=7"></script>
+  <script src="./app.js?v=7"></script>
 </body>
 </html>
