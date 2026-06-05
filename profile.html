@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>retbareHUB | プロフィール</title>
+  <title>retbareHUB | Profile</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css?v=4">
+  <link rel="stylesheet" href="./style.css?v=7">
 </head>
 <body>
-  <div class="ambient-bg" aria-hidden="true"></div>
+  <div class="ambient-bg"></div>
 
   <header class="site-header">
     <a class="brand" href="./index.html">
@@ -26,7 +26,8 @@
       <a href="./news.html" data-page="news">お知らせ</a>
       <a href="./quest.html" data-page="quest">クエスト</a>
       <a href="./profile.html" data-page="profile">プロフィール</a>
-      <a href="./rules.html" data-page="rules">ニュース/ルール</a>
+      <a href="./chat.html" data-page="chat">retbareChat</a>
+      <a href="./rules.html" data-page="rules">ルール</a>
     </nav>
 
     <div class="header-status">
@@ -37,65 +38,58 @@
 
   <main class="page-shell">
     <section class="page-intro">
-      <p class="eyebrow">Retbare Profile</p>
+      <p class="eyebrow">Profile</p>
       <h1>プロフィール</h1>
       <p>
-        ログインすると自分のプロフィールを編集できます。
-        他の人のプロフィール検索はログインしていなくてもできます。
+        ログインすると自分のプロフィールをデコれます。
+        他の人のプロフィール検索はログインなしでもできます。
       </p>
     </section>
 
-    <section id="authBox" class="auth-card">
+    <section class="auth-card" id="authBox">
       <div>
         <p class="eyebrow">Login</p>
         <h2>ログイン / アカウント作成</h2>
         <p id="authStateLine" class="hint">
-          MCIDとパスワードを入力してください。
+          本物の使い回しパスワードは絶対に入れないでください。身内サイト用の簡単なものにしてください。
         </p>
       </div>
 
       <div class="auth-grid">
         <label>
-          User名 / MCID
+          MCID
           <input id="authMcid" type="text" placeholder="例: Retaru46" maxlength="16" autocomplete="off">
         </label>
 
         <label>
           パスワード
-          <input id="authPassword" type="password" placeholder="パスワード" autocomplete="current-password">
+          <input id="authPassword" type="password" placeholder="例: 12345" autocomplete="current-password">
         </label>
 
-        <button id="loginBtn" class="hub-button" type="button">ログイン</button>
-        <button id="createAccountBtn" class="hub-button secondary" type="button">アカウント作成</button>
+        <button id="loginBtn" class="hub-button">ログイン</button>
+        <button id="createAccountBtn" class="hub-button secondary">アカウント作成</button>
       </div>
 
-      <div class="hero-actions" style="margin-top:16px;">
-        <button id="forceLogoutBtn" class="hub-button secondary" type="button">
-          ログイン状態をリセット
-        </button>
+      <div class="mini-actions">
+        <button id="forceLogoutBtn" class="hub-button secondary">ログイン状態をリセット</button>
       </div>
-
-      <p class="hint">
-        初期4人は seed init 後、パスワード <strong>12345</strong> でログインできます。
-      </p>
     </section>
 
-    <section class="section-block" id="publicSearchArea">
+    <section class="section-block">
       <div class="section-title">
         <span>Search</span>
         <h2>他の人のプロフィールを見る</h2>
       </div>
 
       <div class="search-panel soft-card">
-        <input id="publicProfileSearch" type="text" placeholder="見たい人のMCIDを入力">
-        <button id="publicProfileSearchBtn" class="hub-button" type="button">検索</button>
+        <input id="publicProfileSearch" type="text" placeholder="MCIDを入力">
+        <button id="publicProfileSearchBtn" class="hub-button">検索</button>
       </div>
 
       <div class="section-title recent-title">
         <span>Recently Updated</span>
         <h2>最近更新されたプロフィール欄</h2>
       </div>
-
       <div id="recentProfiles" class="player-row"></div>
     </section>
 
@@ -104,11 +98,11 @@
         <div>
           <p class="eyebrow">My Room</p>
           <h2>自分のプロフィール</h2>
-          <p>ここから一言、背景、アイコンフレーム、パーティクル、ガチャアイテムを編集できます。</p>
+          <p>プロフィールを開いて確認。そのまま下の編集・ショップ・ガチャでデコれます。</p>
         </div>
         <div class="dashboard-actions">
-          <button id="openMyProfileBtn" class="hub-button" type="button">自分のプロフを見る</button>
-          <button id="logoutBtn" class="hub-button secondary" type="button">ログアウト</button>
+          <button id="openMyProfileBtn" class="hub-button">自分のプロフィールを見る</button>
+          <button id="logoutBtn" class="hub-button secondary">ログアウト</button>
         </div>
       </div>
 
@@ -116,25 +110,31 @@
         <div id="ownProfilePreview"></div>
       </section>
 
-      <section id="profileEditor" class="profile-editor soft-card"></section>
-
       <section class="section-block">
+        <div class="section-title">
+          <span>Edit</span>
+          <h2>プロフィールをデコる</h2>
+        </div>
+        <section id="profileEditor" class="profile-editor soft-card"></section>
+      </section>
+
+      <section class="section-block" id="shopSection">
         <div class="section-title">
           <span>Shop</span>
           <h2>RetbareHubPoint Shop</h2>
         </div>
 
         <div class="shop-tabs">
-          <button class="shop-tab is-active" data-shop-filter="particle" type="button">パーティクル 40+</button>
-          <button class="shop-tab" data-shop-filter="frame" type="button">アイコンフレーム</button>
-          <button class="shop-tab" data-shop-filter="background" type="button">背景</button>
-          <button class="shop-tab" data-shop-filter="aura" type="button">演出オーラ</button>
+          <button class="shop-tab is-active" data-shop-filter="particle">パーティクル</button>
+          <button class="shop-tab" data-shop-filter="frame">アイコンフレーム</button>
+          <button class="shop-tab" data-shop-filter="background">背景</button>
+          <button class="shop-tab" data-shop-filter="aura">オーラ</button>
         </div>
 
         <div id="profileShop" class="shop-grid"></div>
       </section>
 
-      <section class="section-block">
+      <section class="section-block" id="gachaSection">
         <div class="section-title">
           <span>Gacha</span>
           <h2>にゃんこ大戦争風ガチャ</h2>
@@ -146,8 +146,8 @@
               <span>RETBARE</span>
               <strong>GACHA</strong>
             </div>
-            <p>30Pで1回。SS、SR、R、そして融合素材が出ます。</p>
-            <button id="rollGachaBtn" class="hub-button" type="button">ガチャを回す 30P</button>
+            <p>30Pで1回。SVGアイテム、SS、SR、伝説素材が出ます。</p>
+            <button id="rollGachaBtn" class="hub-button">ガチャを回す 30P</button>
             <div id="lastGachaResult" class="gacha-result"></div>
           </div>
 
@@ -169,17 +169,14 @@
   </footer>
 
   <div id="profileModal" class="profile-modal" hidden>
-    <button class="modal-close" data-close-profile-modal type="button">×</button>
+    <button class="modal-close" data-close-profile-modal>×</button>
     <div id="profileModalContent" class="profile-modal-content"></div>
   </div>
 
-  <audio id="profileAudio" preload="auto"></audio>
-
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-  <script src="./firebase.js?v=4"></script>
-  <script src="./items.js?v=4"></script>
-  <script src="./app.js?v=4"></script>
-  <script src="./profile-fix.js?v=1"></script>
+  <script src="./firebase.js?v=7"></script>
+  <script src="./items.js?v=7"></script>
+  <script src="./app.js?v=7"></script>
 </body>
 </html>
