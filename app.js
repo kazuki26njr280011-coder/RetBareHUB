@@ -2,229 +2,108 @@
   "use strict";
 
   const page = document.documentElement.dataset.page || "home";
+  const SESSION_KEY = "retbare_session_v7";
+  const LEGACY_KEYS = ["retbare_mcid", "retbare_session_mcid"];
+  const SHOP_FILTER_KEY = "retbare_shop_filter_v7";
 
   const TURTLES = {
-    normal: {
-      label: "普通の亀",
-      points: 5,
-      limit: 10,
-      img: "turtle_normal.png",
-      fragment: "#6FA86B"
-    },
-    gold: {
-      label: "黄金の亀",
-      points: 10,
-      limit: 10,
-      img: "turtle_gold.png",
-      fragment: "#E0AB4B"
-    },
-    diamond: {
-      label: "ダイヤの亀",
-      points: 50,
-      limit: 1,
-      img: "turtle_diamond.png",
-      fragment: "#5D8BB0"
-    },
-    god: {
-      label: "神の亀",
-      points: 60,
-      limit: 10,
-      img: "turtle_god.png",
-      fragment: "#E08A4B"
-    }
+    normal: { label: "普通の亀", points: 5, limit: 10, img: "turtle_normal.png", fragment: "#6FA86B" },
+    gold: { label: "黄金の亀", points: 10, limit: 10, img: "turtle_gold.png", fragment: "#E0AB4B" },
+    diamond: { label: "ダイヤの亀", points: 50, limit: 1, img: "turtle_diamond.png", fragment: "#5D8BB0" },
+    god: { label: "神の亀", points: 60, limit: 10, img: "turtle_god.png", fragment: "#E08A4B" }
   };
-
-  const SHOP_ITEMS = [
-    {
-      id: "effect_leaf",
-      kind: "effect",
-      value: "leafConfetti",
-      label: "木の葉クラッカー",
-      desc: "開封時にやわらかい葉っぱが舞います。",
-      cost: 20
-    },
-    {
-      id: "effect_stars",
-      kind: "effect",
-      value: "softStars",
-      label: "控えめ星屑",
-      desc: "プロフィール背景に小さな星がきらめきます。",
-      cost: 25
-    },
-    {
-      id: "song_morning",
-      kind: "song",
-      value: "music/retbare_morning.mp3",
-      label: "朝のretbare",
-      desc: "Storageに置いたmp3をプロフィール曲にします。",
-      cost: 35
-    },
-    {
-      id: "song_campfire",
-      kind: "song",
-      value: "music/campfire_chorus.mp3",
-      label: "焚き火のサビ",
-      desc: "サビだけに切ったmp3を入れて使ってください。",
-      cost: 45
-    },
-    {
-      id: "color_green",
-      kind: "color",
-      color: "green",
-      label: "森の緑カラー",
-      desc: "プロフィールをやさしい緑にします。",
-      cost: 12
-    },
-    {
-      id: "color_orange",
-      kind: "color",
-      color: "orange",
-      label: "夕焼けオレンジ",
-      desc: "プロフィールにあたたかいオレンジを足します。",
-      cost: 18
-    },
-    {
-      id: "color_blue",
-      kind: "color",
-      color: "blue",
-      label: "月夜の青",
-      desc: "青いプロフィールカラーを解放します。",
-      cost: 50
-    }
-  ];
 
   const INITIAL_PLAYERS = {
     Retaru46: {
-      points: 300,
+      points: 500,
       bio: "retbareHUBの管理人。コマンドブロック風の紫装飾を持っています。",
       color: "purple",
-      activeEffect: "commandFrame",
-      music: "",
       titles: ["Admin"],
-      unlockedEffects: ["commandFrame"],
-      unlockedSongs: [],
-      unlockedColors: ["cream", "green", "purple"]
+      unlockedItems: ["bg_command", "frame_command", "aura_command", "particle_purple_smoke", "particle_redstone"],
+      ownedGachaItems: ["retbare_note"],
+      equipped: { background: "bg_command", frame: "frame_command", particle: "particle_purple_smoke", aura: "aura_command", showcase: "retbare_note" }
     },
-    Mukisukino: {
-      points: 120,
-      bio: "UHC KING。金リンゴクラッカーと王冠演出を最初から解放済み。",
+    MukiSukino: {
+      points: 240,
+      bio: "UHC KING。金リンゴクラッカー、王冠演出、むきメイドを所持。",
       color: "gold",
-      activeEffect: "goldenAppleConfetti",
-      music: "",
       titles: ["UHC KING"],
-      unlockedEffects: ["goldenAppleConfetti", "kingCrown"],
-      unlockedSongs: [],
-      unlockedColors: ["cream", "green", "gold"]
+      unlockedItems: ["bg_gold", "frame_gold", "aura_king", "particle_golden_apple", "particle_halo"],
+      ownedGachaItems: ["muki_maid", "maid_and_muscle", "gold_apple_badge"],
+      equipped: { background: "bg_gold", frame: "frame_gold", particle: "particle_golden_apple", aura: "aura_king", showcase: "muki_maid" }
     },
     "4y44": {
-      points: 120,
-      bio: "PVP crown。サイト内にダイヤ剣を1日2個まで設置できます。",
+      points: 220,
+      bio: "PVP crown。サイト内にダイヤ剣を1日2個まで設置できます。お豆腐メンタルなんです・・",
       color: "green",
-      activeEffect: "slashLight",
-      music: "",
       titles: ["PVP crown"],
-      unlockedEffects: ["slashLight"],
-      unlockedSongs: [],
-      unlockedColors: ["cream", "green"]
+      unlockedItems: ["bg_pvp", "frame_blade", "aura_slash", "particle_diamond", "particle_charcoal"],
+      ownedGachaItems: ["tofu_mental", "pvp_spark"],
+      equipped: { background: "bg_pvp", frame: "frame_blade", particle: "particle_diamond", aura: "aura_slash", showcase: "tofu_mental" }
     },
     "386ede": {
-      points: 120,
-      bio: "Sword God。青いプロフィールカラーとエンチャント風オーラを持っています。",
+      points: 260,
+      bio: "Sword God。青いプロフィールカラーと最高SS『闇のペンギン』を最初から所持。",
       color: "blue",
-      activeEffect: "blueEnchantAura",
-      music: "",
       titles: ["Sword God"],
-      unlockedEffects: ["blueEnchantAura"],
-      unlockedSongs: [],
-      unlockedColors: ["cream", "green", "blue"]
+      unlockedItems: ["bg_dark", "frame_shadow", "aura_dark", "particle_black_feather", "particle_blue_runes", "particle_lapis"],
+      ownedGachaItems: ["dark_penguin", "diamond_piece"],
+      equipped: { background: "bg_dark", frame: "frame_shadow", particle: "particle_black_feather", aura: "aura_dark", showcase: "dark_penguin" }
     }
   };
 
   const FALLBACK_NEWS = [
-    {
-      title: "retbareHUBができました",
-      body: "プロフィール、Point、亀システムをまとめたファンサイトです。",
-      category: "site",
-      createdAt: Date.now() - 1000 * 60 * 60 * 8
-    },
-    {
-      title: "亀を見つけたらクリック",
-      body: "ページに出現する亀をクリックするとRetbareHubPointが手に入ります。",
-      category: "point",
-      createdAt: Date.now() - 1000 * 60 * 60 * 24
-    },
-    {
-      title: "プロフィール曲はStorageから再生",
-      body: "mp3をFirebase Storageにアップロードして、Firestoreのmusicにパスを入れます。",
-      category: "music",
-      createdAt: Date.now() - 1000 * 60 * 60 * 48
-    }
+    { title: "retbareHUB v7", body: "ログイン、プロフィール、チャット、ガチャ、亀、Admin投稿を整理しました。", category: "site", createdAt: Date.now() },
+    { title: "RetbareサーバーIP", body: "IP: 110.67.56.168:25565", category: "server", createdAt: Date.now() - 86400000 }
   ];
 
   const FALLBACK_QUESTS = [
-    {
-      title: "拠点まわりを散歩する",
-      body: "いい景色を見つけて、あとでみんなに教えよう。",
-      reward: "5P",
-      status: "daily"
-    },
-    {
-      title: "誰かの建築をほめる",
-      body: "看板やチャットで、いいところを一つ伝えてみよう。",
-      reward: "8P",
-      status: "warm"
-    },
-    {
-      title: "ネザー素材を少し集める",
-      body: "無理せず安全に。帰るまでがクエストです。",
-      reward: "12P",
-      status: "adventure"
-    },
-    {
-      title: "スクショを1枚残す",
-      body: "今日のretbareらしい場面を記録しよう。",
-      reward: "6P",
-      status: "memory"
-    }
+    { title: "拠点まわりを散歩する", body: "いい景色を見つけて、あとでみんなに教えよう。", reward: "5P", status: "daily" },
+    { title: "PVPを1戦だけする", body: "勝っても負けてもGG。", reward: "12P", status: "pvp" }
   ];
 
-  let pointUnsub = null;
+  let currentUser = null;
+  let currentUserUnsub = null;
   let turtleUnsub = null;
   let swordUnsub = null;
+  let chatThreadUnsub = null;
+  let chatMessageUnsub = null;
   let turtleEls = new Map();
   let swordEls = new Map();
-  let currentProfile = null;
+  let selectedThreadId = null;
   let pendingTurtleType = null;
   let pendingSwordOwner = null;
   let placementCursor = null;
-  let cursorDustLast = 0;
+  let shopFilter = localStorage.getItem(SHOP_FILTER_KEY) || "particle";
+  let pressedKeys = {};
   let admin = {};
-  const pressedKeys = {};
 
   document.addEventListener("DOMContentLoaded", init);
   window.retbareSeedInitialData = seedInitialData;
 
   function init() {
+    clearLegacyLoginKeys();
     markActiveNav();
     createToastArea();
-    setupProfileJumpButtons();
+    setupCopyIp();
+    setupProfileModal();
     setupPlacementMode();
-    setupCursorDust();
     initAdminConsole();
-    refreshUserStatus();
+    listenCurrentUser();
 
     if (isFirebaseReady()) {
       listenTurtles();
       listenSwords();
-      setupSwordPowerButton();
+      setupSwordButton();
     } else {
-      toast("firebase.js に firebaseConfig を貼ると、FirestoreとStorage機能が動きます。", "note", 6500);
+      toast("firebase.jsの設定を確認してね。", "error", 6000);
     }
 
     if (page === "home") initHomePage();
     if (page === "news") initNewsPage();
     if (page === "quest") initQuestPage();
     if (page === "profile") initProfilePage();
+    if (page === "chat") initChatPage();
   }
 
   function $(selector, root) {
@@ -235,59 +114,9 @@
     return Array.from((root || document).querySelectorAll(selector));
   }
 
-  function isFirebaseReady() {
-    return Boolean(window.RH && window.RH.firebaseReady && window.RH.db);
-  }
-
-  function db() {
-    return window.RH.db;
-  }
-
-  function storage() {
-    return window.RH.storage;
-  }
-
-  function serverTimestamp() {
-    return window.RH.serverTimestamp();
-  }
-
-  function increment(value) {
-    return window.RH.increment(value);
-  }
-
-  function arrayUnion(value) {
-    return window.RH.arrayUnion(value);
-  }
-
-  function playersRef() {
-    return db().collection("players");
-  }
-
-  function turtlesRef() {
-    return db().collection("config").doc("turtles").collection("active");
-  }
-
-  function swordsRef() {
-    return db().collection("config").doc("swords").collection("active");
-  }
-
-  function newsRef() {
-    return db().collection("news");
-  }
-
-  function questsRef() {
-    return db().collection("quests");
-  }
-
   function esc(value) {
     return String(value ?? "").replace(/[&<>"']/g, function (char) {
-      return {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        "\"": "&quot;",
-        "'": "&#039;"
-      }[char];
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#039;" }[char];
     });
   }
 
@@ -299,63 +128,118 @@
     return Array.from(new Set(values.filter(Boolean)));
   }
 
-  function clamp(value, min, max) {
-    return Math.max(min, Math.min(max, value));
-  }
-
   function normalizeMcid(value) {
     return String(value || "").trim().replace(/[^A-Za-z0-9_]/g, "").slice(0, 16);
   }
 
-  function getLocalMcid() {
-    return normalizeMcid(localStorage.getItem("retbare_mcid") || "");
+  function lowerMcid(value) {
+    return normalizeMcid(value).toLowerCase();
   }
 
-  function setLocalMcid(mcid) {
-    const clean = normalizeMcid(mcid);
-    if (!clean) return;
-    localStorage.setItem("retbare_mcid", clean);
-    refreshUserStatus();
-    restartTurtleListener();
+  function isFirebaseReady() {
+    return Boolean(window.RH && window.RH.firebaseReady && window.RH.db);
   }
 
-  function basePlayer(mcid) {
+  function db() { return window.RH.db; }
+  function serverTimestamp() { return window.RH.serverTimestamp(); }
+  function increment(v) { return window.RH.increment(v); }
+  function arrayUnion(v) { return window.RH.arrayUnion(v); }
+  function deleteField() { return window.RH.deleteField(); }
+
+  function playersRef() { return db().collection("players"); }
+  function newsRef() { return db().collection("news"); }
+  function questsRef() { return db().collection("quests"); }
+  function threadsRef() { return db().collection("chatThreads"); }
+  function turtlesRef() { return db().collection("config").doc("turtles").collection("active"); }
+  function swordsRef() { return db().collection("config").doc("swords").collection("active"); }
+
+  function clearLegacyLoginKeys() {
+    LEGACY_KEYS.forEach(function (key) {
+      localStorage.removeItem(key);
+    });
+  }
+
+  function getSessionMcid() {
+    return normalizeMcid(localStorage.getItem(SESSION_KEY) || "");
+  }
+
+  function setSessionMcid(mcid) {
+    clearLegacyLoginKeys();
+    localStorage.setItem(SESSION_KEY, normalizeMcid(mcid));
+  }
+
+  function clearSession() {
+    localStorage.removeItem(SESSION_KEY);
+    clearLegacyLoginKeys();
+    currentUser = null;
+    if (currentUserUnsub) currentUserUnsub();
+    currentUserUnsub = null;
+    refreshHeader(null);
+    if (page === "profile") renderProfileLoggedOut();
+    if (page === "chat") renderChatAuth();
+  }
+
+  async function sha256(text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hash = await crypto.subtle.digest("SHA-256", data);
+    return Array.from(new Uint8Array(hash)).map(function (b) {
+      return b.toString(16).padStart(2, "0");
+    }).join("");
+  }
+
+  async function passwordHash(mcid, password) {
+    return sha256("retbareHUB:v7:" + lowerMcid(mcid) + ":" + password);
+  }
+
+  function defaultEquipped() {
+    return { background: "bg_cream", frame: "frame_wood", particle: "particle_leaf", aura: "aura_none", showcase: "" };
+  }
+
+  function normalizePlayer(id, data) {
+    const mcid = normalizeMcid((data && data.mcid) || id);
     return {
+      docId: id,
       mcid,
-      points: 0,
-      bio: "よろしくね。まだ一言コメントはありません。",
-      color: "cream",
-      music: "",
-      activeEffect: "",
-      titles: [],
-      unlockedEffects: [],
-      unlockedSongs: [],
-      unlockedColors: ["cream", "green"]
+      mcidLower: lowerMcid(mcid),
+      hasAccount: Boolean(data && data.hasAccount),
+      passwordHash: (data && data.passwordHash) || "",
+      points: Number((data && data.points) || 0),
+      bio: (data && data.bio) || "よろしくね。まだ一言コメントはありません。",
+      color: (data && data.color) || "cream",
+      titles: asArray(data && data.titles),
+      unlockedItems: unique(["bg_cream", "frame_wood", "particle_leaf", "aura_none"].concat(asArray(data && data.unlockedItems))),
+      ownedGachaItems: unique(asArray(data && data.ownedGachaItems)),
+      equipped: Object.assign({}, defaultEquipped(), (data && data.equipped) || {}),
+      createdAt: data && data.createdAt,
+      updatedAt: data && data.updatedAt
     };
   }
 
-  function makeDefaultPlayer(mcid) {
+  function visibleAccount(player) {
+    return Boolean(player && (player.hasAccount || player.passwordHash || player.titles.length));
+  }
+
+  function isAdmin(player) {
+    return Boolean(player && (lowerMcid(player.mcid) === "retaru46" || player.titles.includes("Admin")));
+  }
+
+  async function findPlayerDoc(mcid) {
     const clean = normalizeMcid(mcid);
-    return Object.assign({}, basePlayer(clean), INITIAL_PLAYERS[clean] || {}, { mcid: clean });
-  }
+    if (!clean) return null;
 
-  function hasTitle(player, title) {
-    return asArray(player.titles).includes(title);
-  }
+    const exact = await playersRef().doc(clean).get();
+    if (exact.exists) {
+      return { ref: exact.ref, snap: exact, player: normalizePlayer(exact.id, exact.data()) };
+    }
 
-  function formatDate(value) {
-    if (!value) return "";
-    const date = typeof value.toDate === "function" ? value.toDate() : new Date(value);
-    if (Number.isNaN(date.getTime())) return "";
-    return new Intl.DateTimeFormat("ja-JP", {
-      month: "short",
-      day: "numeric"
-    }).format(date);
-  }
+    const q = await playersRef().where("mcidLower", "==", lowerMcid(clean)).limit(1).get();
+    if (!q.empty) {
+      const doc = q.docs[0];
+      return { ref: doc.ref, snap: doc, player: normalizePlayer(doc.id, doc.data()) };
+    }
 
-  function truncate(text, length) {
-    const value = String(text || "");
-    return value.length > length ? value.slice(0, length) + "…" : value;
+    return null;
   }
 
   function markActiveNav() {
@@ -373,1013 +257,1036 @@
   function toast(message, type, ms) {
     const area = $(".toast-area");
     if (!area) return;
-
     const item = document.createElement("div");
     item.className = `toast ${type || ""}`;
     item.textContent = message;
     area.appendChild(item);
-
-    window.setTimeout(function () {
+    setTimeout(function () {
       item.style.opacity = "0";
-      item.style.transform = "translateY(10px)";
-      window.setTimeout(function () {
-        item.remove();
-      }, 250);
+      setTimeout(function () { item.remove(); }, 250);
     }, ms || 3600);
   }
 
-  function refreshUserStatus() {
-    const mcid = getLocalMcid();
-    const mcidPill = $("#currentMcidPill");
-    const pointPill = $("#pointPill");
+  function setupCopyIp() {
 
-    if (mcidPill) {
-      mcidPill.textContent = mcid ? `MCID: ${mcid}` : "MCID未設定";
-    }
-
-    if (pointUnsub) {
-      pointUnsub();
-      pointUnsub = null;
-    }
-
-    if (!pointPill) return;
-
-    if (!mcid || !isFirebaseReady()) {
-      pointPill.textContent = "0P";
-      refreshSwordPowerButton();
-      return;
-    }
-
-    pointUnsub = playersRef().doc(mcid).onSnapshot(function (snap) {
-      const points = snap.exists ? Number(snap.data().points || 0) : 0;
-      pointPill.textContent = `${points}P`;
-      refreshSwordPowerButton();
-    });
-  }
-
-  function restartTurtleListener() {
-    if (!isFirebaseReady() || !turtleUnsub) return;
-    turtleUnsub();
-    turtleUnsub = null;
-    turtleEls.forEach(function (el) {
-      el.remove();
-    });
-    turtleEls.clear();
-    listenTurtles();
-  }
-
-  function setupProfileJumpButtons() {
-
-    $$("[data-profile-jump]").forEach(function (button) {
-      button.addEventListener("click", function () {
-        const current = getLocalMcid();
-        const input = current || prompt("開きたいMCIDを入力してね");
-        const mcid = normalizeMcid(input);
-        if (!mcid) return;
-        location.href = `./profile.html?mcid=${encodeURIComponent(mcid)}`;
+    $$("[data-copy-ip]").forEach(function (button) {
+      button.addEventListener("click", async function () {
+        try {
+          await navigator.clipboard.writeText("110.67.56.168:25565");
+          toast("IPをコピーしました。", "ok");
+        } catch {
+          toast("IP: 110.67.56.168:25565", "ok");
+        }
       });
     });
   }
 
-  function initHomePage() {
-    loadHomeNews();
-    loadHomePlayers();
-    renderHomeSummary();
-  }
+  function listenCurrentUser() {
+    if (!isFirebaseReady()) return;
 
-  async function loadHomeNews() {
-    const container = $("#homeNews");
-    if (!container) return;
+    if (currentUserUnsub) currentUserUnsub();
+    currentUserUnsub = null;
 
-    if (!isFirebaseReady()) {
-      renderNewsCards(container, FALLBACK_NEWS.slice(0, 3));
+    const mcid = getSessionMcid();
+    if (!mcid) {
+      currentUser = null;
+      refreshHeader(null);
+      renderPageAuthDependent();
       return;
     }
 
-    try {
-      const snap = await newsRef().orderBy("createdAt", "desc").limit(3).get();
-      const items = snap.docs.map(function (doc) {
-        return Object.assign({ id: doc.id }, doc.data());
+    findPlayerDoc(mcid).then(function (found) {
+      if (!found) {
+        clearSession();
+        return;
+      }
+
+      currentUserUnsub = found.ref.onSnapshot(function (snap) {
+        currentUser = normalizePlayer(snap.id, snap.data());
+        refreshHeader(currentUser);
+        renderPageAuthDependent();
       });
-      renderNewsCards(container, items.length ? items : FALLBACK_NEWS.slice(0, 3));
-    } catch (error) {
-      console.error(error);
-      renderNewsCards(container, FALLBACK_NEWS.slice(0, 3));
+    });
+  }
+
+  function refreshHeader(player) {
+    const name = $("#currentMcidPill");
+    const point = $("#pointPill");
+    if (name) name.textContent = player ? `MCID: ${player.mcid}` : "未ログイン";
+    if (point) point.textContent = player ? `${Number(player.points || 0)}P` : "0P";
+  }
+
+  function renderPageAuthDependent() {
+    if (page === "profile") {
+      if (currentUser) renderProfileDashboard(currentUser);
+      else renderProfileLoggedOut();
     }
-  }
-
-  async function loadHomePlayers() {
-    const container = $("#homePlayers");
-    if (!container) return;
-
-    if (!isFirebaseReady()) {
-      renderPlayerCards(container, Object.values(INITIAL_PLAYERS).slice(0, 4));
-      return;
-    }
-
-    try {
-      const snap = await playersRef().orderBy("createdAt", "desc").limit(4).get();
-      const players = snap.docs.map(function (doc) {
-        return Object.assign({ mcid: doc.id }, doc.data());
-      });
-      renderPlayerCards(container, players.length ? players : Object.values(INITIAL_PLAYERS));
-    } catch (error) {
-      console.error(error);
-      renderPlayerCards(container, Object.values(INITIAL_PLAYERS));
-    }
-  }
-
-  function renderHomeSummary() {
-    const container = $("#homeSummary");
-    if (!container) return;
-
-    container.innerHTML = `
-      <p>retbareHUBでは、プロフィールを開いた時の演出、Pointショップ、Admin設置の亀、タイトル別オーラを楽しめます。</p>
-      <ul class="summary-list">
-        <li><span class="summary-dot"></span><span>亀クリックでRetbareHubPointを獲得</span></li>
-        <li><span class="summary-dot"></span><span>Pointで曲・色・エフェクトを解放</span></li>
-        <li><span class="summary-dot"></span><span>タイトル持ちは特別なプロフィール演出</span></li>
-      </ul>
-    `;
-  }
-
-  function initNewsPage() {
-    loadNewsList();
-  }
-
-  async function loadNewsList() {
-    const container = $("#newsList");
-    if (!container) return;
-
-    if (!isFirebaseReady()) {
-      renderNewsStack(container, FALLBACK_NEWS);
-      return;
-    }
-
-    try {
-      const snap = await newsRef().orderBy("createdAt", "desc").limit(30).get();
-      const items = snap.docs.map(function (doc) {
-        return Object.assign({ id: doc.id }, doc.data());
-      });
-      renderNewsStack(container, items.length ? items : FALLBACK_NEWS);
-    } catch (error) {
-      console.error(error);
-      renderNewsStack(container, FALLBACK_NEWS);
-    }
-  }
-
-  function initQuestPage() {
-    loadQuestList();
-  }
-
-  async function loadQuestList() {
-    const container = $("#questList");
-    if (!container) return;
-
-    if (!isFirebaseReady()) {
-      renderQuestCards(container, FALLBACK_QUESTS);
-      return;
-    }
-
-    try {
-      const snap = await questsRef().orderBy("createdAt", "desc").limit(30).get();
-      const items = snap.docs.map(function (doc) {
-        return Object.assign({ id: doc.id }, doc.data());
-      });
-      renderQuestCards(container, items.length ? items : FALLBACK_QUESTS);
-    } catch (error) {
-      console.error(error);
-      renderQuestCards(container, FALLBACK_QUESTS);
-    }
-  }
-
-  function renderNewsCards(container, items) {
-    container.innerHTML = items.map(function (item) {
-      return `
-        <article class="news-card">
-          <span class="category-chip">${esc(item.category || "news")}</span>
-          <h3>${esc(item.title || "無題のお知らせ")}</h3>
-          <time>${esc(formatDate(item.createdAt))}</time>
-          <p>${esc(truncate(item.body || "", 90))}</p>
-        </article>
-      `;
-    }).join("");
-  }
-
-  function renderNewsStack(container, items) {
-    container.innerHTML = items.map(function (item) {
-      return `
-        <article class="stack-item">
-          <span class="category-chip">${esc(item.category || "news")}</span>
-          <h2>${esc(item.title || "無題のお知らせ")}</h2>
-          <time>${esc(formatDate(item.createdAt))}</time>
-          <p>${esc(item.body || "")}</p>
-        </article>
-      `;
-    }).join("");
-  }
-
-  function renderPlayerCards(container, players) {
-    container.innerHTML = players.map(function (player) {
-      const mcid = normalizeMcid(player.mcid || "");
-      return `
-        <a class="player-card" href="./profile.html?mcid=${encodeURIComponent(mcid)}">
-          <img src="https://mc-heads.net/avatar/${encodeURIComponent(mcid)}/96" alt="${esc(mcid)}">
-          <span>
-            <strong>${esc(mcid)}</strong>
-            <small>${esc(asArray(player.titles)[0] || "member")}</small>
-          </span>
-        </a>
-      `;
-    }).join("");
-  }
-
-  function renderQuestCards(container, items) {
-    container.innerHTML = items.map(function (item) {
-      return `
-        <article class="quest-card">
-          <span class="status-chip">${esc(item.status || "quest")}</span>
-          <h3>${esc(item.title || "無題クエスト")}</h3>
-          <p>${esc(item.body || "")}</p>
-          <div class="quest-meta">
-            <span class="category-chip">Reward ${esc(item.reward || "?" )}</span>
-          </div>
-        </article>
-      `;
-    }).join("");
+    if (page === "chat") renderChatAuth();
+    if (page === "news") renderAdminNewsPanel();
+    if (page === "quest") renderAdminQuestPanel();
+    refreshSwordButton();
   }
 
   function initProfilePage() {
-    const input = $("#mcidInput");
-    const button = $("#loadProfileBtn");
+    $("#loginBtn")?.addEventListener("click", loginAccount);
+    $("#createAccountBtn")?.addEventListener("click", createAccount);
+    $("#forceLogoutBtn")?.addEventListener("click", function () {
+      clearSession();
+      location.href = "./profile.html";
+    });
+    $("#logoutBtn")?.addEventListener("click", function () {
+      clearSession();
+      toast("ログアウトしました。", "ok");
+    });
+    $("#publicProfileSearchBtn")?.addEventListener("click", function () {
+      openPublicProfile($("#publicProfileSearch").value);
+    });
+    $("#publicProfileSearch")?.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") openPublicProfile($("#publicProfileSearch").value);
+    });
+    $("#openMyProfileBtn")?.addEventListener("click", function () {
+      if (currentUser) openProfileModal(currentUser, true);
+    });
+
+
+    $$(".shop-tab").forEach(function (button) {
+      button.addEventListener("click", function () {
+        shopFilter = button.dataset.shopFilter;
+        localStorage.setItem(SHOP_FILTER_KEY, shopFilter);
+        renderShop(currentUser);
+      });
+    });
+
+    document.addEventListener("click", function (event) {
+      const buy = event.target.closest("[data-buy-item]");
+      if (buy) buyOrEquipItem(buy.dataset.buyItem);
+
+      const equipGacha = event.target.closest("[data-equip-gacha]");
+      if (equipGacha) equipGachaShowcase(equipGacha.dataset.equipGacha);
+
+      if (event.target.closest("#rollGachaBtn")) rollGacha();
+      if (event.target.closest("#fusionBtn")) fuseLegendItem();
+
+      if (event.target.closest("[data-scroll-edit]")) {
+        closeProfileModal();
+        $("#profileEditor")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      if (event.target.closest("[data-scroll-shop]")) {
+        closeProfileModal();
+        $("#shopSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      if (event.target.closest("[data-scroll-gacha]")) {
+        closeProfileModal();
+        $("#gachaSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
 
     const params = new URLSearchParams(location.search);
-    const queryMcid = normalizeMcid(params.get("mcid"));
-    const saved = getLocalMcid();
+    const view = params.get("view");
+    if (view) setTimeout(function () { openPublicProfile(view); }, 700);
 
-    if (input) input.value = queryMcid || saved || "";
+    loadRecentProfiles("#recentProfiles");
+    renderPageAuthDependent();
+  }
 
-    if (button) {
-      button.addEventListener("click", function () {
-        loadProfile(input ? input.value : "");
-      });
+  async function loginAccount() {
+    const mcid = normalizeMcid($("#authMcid")?.value);
+    const password = String($("#authPassword")?.value || "");
+
+    if (!mcid || !password) {
+      toast("MCIDとパスワードを入れてね。", "error");
+      return;
     }
 
-    if (input) {
-      input.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-          loadProfile(input.value);
-        }
-      });
-    }
+    try {
+      const found = await findPlayerDoc(mcid);
+      if (!found || !visibleAccount(found.player)) {
+        toast("そのアカウントはまだ作成されていません。", "error");
+        return;
+      }
 
-    if (queryMcid) {
-      loadProfile(queryMcid);
-    } else {
-      renderShop(null);
+      const data = found.snap.data() || {};
+      const hash = await passwordHash(found.player.mcid, password);
+      const oldPlain = data.password;
+
+      if (data.passwordHash !== hash && oldPlain !== password) {
+        toast("パスワードが違います。", "error");
+        return;
+      }
+
+      const update = {
+        hasAccount: true,
+        mcid: found.player.mcid,
+        mcidLower: lowerMcid(found.player.mcid),
+        passwordHash: hash,
+        updatedAt: serverTimestamp()
+      };
+
+      if (oldPlain) update.password = deleteField();
+
+      await found.ref.set(update, { merge: true });
+
+      setSessionMcid(found.player.mcid);
+      toast(`${found.player.mcid}でログインしました。`, "ok");
+      listenCurrentUser();
+    } catch (error) {
+      console.error(error);
+      toast("ログインに失敗しました。", "error");
     }
   }
 
-  async function ensurePlayer(mcid) {
-    const clean = normalizeMcid(mcid);
-    if (!clean) throw new Error("MCIDを入力してください。");
+  async function createAccount() {
+    const mcid = normalizeMcid($("#authMcid")?.value);
+    const password = String($("#authPassword")?.value || "");
 
-    const fallback = makeDefaultPlayer(clean);
-
-    if (!isFirebaseReady()) return fallback;
-
-    const ref = playersRef().doc(clean);
-    const snap = await ref.get();
-
-    if (snap.exists) {
-      return Object.assign({}, fallback, snap.data(), { mcid: clean });
+    if (!mcid || password.length < 3) {
+      toast("MCIDと3文字以上のパスワードを入れてね。", "error");
+      return;
     }
 
-    await ref.set(Object.assign({}, fallback, {
-      createdAt: serverTimestamp(),
+    try {
+      const existing = await findPlayerDoc(mcid);
+      if (existing && visibleAccount(existing.player)) {
+        toast("そのMCIDはすでに存在します。", "error");
+        return;
+      }
+
+      const hash = await passwordHash(mcid, password);
+      const ref = existing ? existing.ref : playersRef().doc(mcid);
+      const old = existing ? existing.player : null;
+
+      await ref.set({
+        mcid,
+        mcidLower: lowerMcid(mcid),
+        hasAccount: true,
+        passwordHash: hash,
+        password: deleteField(),
+        points: old ? old.points : 0,
+        bio: old ? old.bio : "よろしくね。まだ一言コメントはありません。",
+        color: old ? old.color : "cream",
+        titles: old ? old.titles : [],
+        unlockedItems: old ? old.unlockedItems : ["bg_cream", "frame_wood", "particle_leaf", "aura_none"],
+        ownedGachaItems: old ? old.ownedGachaItems : [],
+        equipped: old ? old.equipped : defaultEquipped(),
+        createdAt: old && old.createdAt ? old.createdAt : serverTimestamp(),
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+
+      setSessionMcid(mcid);
+      toast("アカウントを作成しました。", "ok");
+      listenCurrentUser();
+    } catch (error) {
+      console.error(error);
+      toast("アカウント作成に失敗しました。", "error");
+    }
+  }
+
+  function renderProfileLoggedOut() {
+    const dashboard = $("#profileDashboard");
+    if (dashboard) dashboard.hidden = true;
+
+    const line = $("#authStateLine");
+    if (line) line.textContent = "未ログインです。検索は未ログインでもOK。編集・Point・チャット投稿はログインが必要です。";
+  }
+
+  function renderProfileDashboard(player) {
+    const dashboard = $("#profileDashboard");
+    if (!dashboard || !player) return;
+    dashboard.hidden = false;
+
+    const line = $("#authStateLine");
+    if (line) line.innerHTML = `現在 <strong>${esc(player.mcid)}</strong> でログイン中。別アカウントに切り替えるなら上でログインできます。`;
+
+    const preview = $("#ownProfilePreview");
+    if (preview) preview.innerHTML = profileCardHTML(player, { own: true });
+
+    renderEditor(player);
+    renderShop(player);
+    renderGacha(player);
+  }
+
+  function renderEditor(player) {
+    const editor = $("#profileEditor");
+    if (!editor) return;
+
+    editor.innerHTML = `
+      <div class="editor-grid">
+        <label>一言コメント<textarea id="editBio" maxlength="160">${esc(player.bio)}</textarea></label>
+        <label>背景<select id="editBackground">${ownedOptions(player, "background", player.equipped.background)}</select></label>
+        <label>フレーム<select id="editFrame">${ownedOptions(player, "frame", player.equipped.frame)}</select></label>
+        <label>パーティクル<select id="editParticle">${ownedOptions(player, "particle", player.equipped.particle)}</select></label>
+        <label>オーラ<select id="editAura">${ownedOptions(player, "aura", player.equipped.aura)}</select></label>
+        <label>展示アイテム<select id="editShowcase">${gachaOptions(player, player.equipped.showcase)}</select></label>
+        <button id="saveProfileBtn" class="hub-button">保存する</button>
+      </div>
+    `;
+
+    $("#saveProfileBtn").onclick = saveProfile;
+  }
+
+  function ownedOptions(player, kind, selected) {
+    return window.RHItemLib.catalog
+      .filter(function (item) {
+        return item.kind === kind && (item.free || player.unlockedItems.includes(item.id));
+      })
+      .map(function (item) {
+        return `<option value="${esc(item.id)}" ${item.id === selected ? "selected" : ""}>${esc(item.name)}</option>`;
+      }).join("");
+  }
+
+  function gachaOptions(player, selected) {
+    return [`<option value="">なし</option>`].concat(player.ownedGachaItems.map(function (id) {
+      const item = window.RHItemLib.getGachaItem(id);
+      if (!item) return "";
+      return `<option value="${esc(id)}" ${id === selected ? "selected" : ""}>${esc(item.name)}</option>`;
+    })).join("");
+  }
+
+  async function saveProfile() {
+    if (!currentUser) return;
+
+    const equipped = {
+      background: $("#editBackground").value,
+      frame: $("#editFrame").value,
+      particle: $("#editParticle").value,
+      aura: $("#editAura").value,
+      showcase: $("#editShowcase").value
+    };
+
+    await playersRef().doc(currentUser.docId).set({
+      bio: $("#editBio").value.slice(0, 160),
+      equipped,
       updatedAt: serverTimestamp()
-    }), { merge: true });
+    }, { merge: true });
 
-    return fallback;
+    toast("プロフィールを保存しました。", "ok");
+    spawnEquippedParticles(Object.assign({}, currentUser, { equipped }), 40);
   }
 
-  async function loadProfile(mcid, options) {
-    const clean = normalizeMcid(mcid);
-    if (!clean) {
+  function profileCardHTML(player, options) {
+    const opts = options || {};
+    const equipped = Object.assign({}, defaultEquipped(), player.equipped || {});
+    const bg = window.RHItemLib.getItem(equipped.background) || window.RHItemLib.getItem("bg_cream");
+    const frame = window.RHItemLib.getItem(equipped.frame) || window.RHItemLib.getItem("frame_wood");
+    const aura = window.RHItemLib.getItem(equipped.aura) || window.RHItemLib.getItem("aura_none");
+    const particle = window.RHItemLib.getItem(equipped.particle) || window.RHItemLib.getItem("particle_leaf");
+    const showcase = equipped.showcase ? window.RHItemLib.getGachaItem(equipped.showcase) : null;
+
+    return `
+      <article class="ret-profile-card ${bg.css} ${aura.css}">
+        <div class="profile-cover">
+          <div class="profile-avatar-wrap ${frame.css}">
+            <img src="https://mc-heads.net/avatar/${encodeURIComponent(player.mcid)}/128" alt="${esc(player.mcid)}">
+          </div>
+          <div class="profile-main">
+            <div class="profile-name-line">
+              <h2>${esc(player.mcid)}</h2>
+              ${opts.own ? `<span class="points-badge">${Number(player.points || 0)}P</span>` : ""}
+            </div>
+            <div class="title-row">
+              ${
+                player.titles.length
+                  ? player.titles.map(function (t) { return `<span class="title-chip">${esc(t)}</span>`; }).join("")
+                  : `<span class="title-chip">member</span>`
+              }
+            </div>
+            <p class="profile-bio">${esc(player.bio)}</p>
+          </div>
+        </div>
+        <div class="profile-meta-grid">
+          <div class="profile-stat"><small>背景</small><strong>${esc(bg.name)}</strong></div>
+          <div class="profile-stat"><small>フレーム</small><strong>${esc(frame.name)}</strong></div>
+          <div class="profile-stat"><small>パーティクル</small><strong>${esc(particle.name)}</strong></div>
+          <div class="profile-stat"><small>展示</small><strong>${esc(showcase ? showcase.name : "なし")}</strong></div>
+        </div>
+        ${
+          showcase
+            ? `<div class="profile-showcase"><div class="profile-showcase-inner">${window.RHItemLib.renderGachaSvg(showcase.id)}</div></div>`
+            : ""
+        }
+        ${
+          opts.own
+            ? `<div class="modal-own-actions">
+                 <button class="hub-button" data-scroll-edit>このプロフィールを編集</button>
+                 <button class="hub-button secondary" data-scroll-shop>ショップへ</button>
+                 <button class="hub-button secondary" data-scroll-gacha>ガチャへ</button>
+               </div>`
+            : ""
+        }
+      </article>
+    `;
+  }
+
+  async function openPublicProfile(rawMcid) {
+    const mcid = normalizeMcid(rawMcid);
+    if (!mcid) {
       toast("MCIDを入力してね。", "error");
       return;
     }
 
-    try {
-      setLocalMcid(clean);
-
-      const player = await ensurePlayer(clean);
-      currentProfile = player;
-
-      renderProfile(player);
-      renderProfileEditor(player);
-      renderShop(player);
-
-      if (!options || !options.skipOpening) {
-        playProfileOpening(player);
-        playProfileMusic(player);
-      }
-    } catch (error) {
-      console.error(error);
-      toast(error.message || "プロフィールを開けませんでした。", "error");
-    }
-  }
-
-  function profileColorClass(color) {
-    const safe = String(color || "cream").replace(/[^a-z-]/g, "");
-    return `profile-color-${safe}`;
-  }
-
-  function getTitleEffects(player) {
-    const effects = [];
-    if (hasTitle(player, "Admin")) effects.push("commandFrame");
-    if (hasTitle(player, "UHC KING")) effects.push("goldenAppleConfetti", "kingCrown");
-    if (hasTitle(player, "PVP crown")) effects.push("slashLight");
-    if (hasTitle(player, "Sword God")) effects.push("blueEnchantAura");
-    return effects;
-  }
-
-  function profileEffectMarkup(player) {
-    const effects = unique([
-      player.activeEffect,
-      ...asArray(player.unlockedEffects),
-      ...getTitleEffects(player)
-    ]);
-
-    let html = "";
-
-    if (effects.includes("commandFrame")) {
-      html += `<div class="command-frame" aria-hidden="true"></div>`;
-    }
-
-    if (effects.includes("blueEnchantAura")) {
-      html += `<div class="enchant-aura" aria-hidden="true"></div>`;
-    }
-
-    if (effects.includes("slashLight")) {
-      html += `<div class="slash-aura" aria-hidden="true"></div>`;
-    }
-
-    if (effects.includes("softStars")) {
-      html += `<div class="soft-star-field" aria-hidden="true"></div>`;
-    }
-
-    if (effects.includes("kingCrown") || hasTitle(player, "UHC KING")) {
-      html += `
-        <div class="crown-mark" aria-hidden="true">${crownSvg()}</div>
-        <div class="apple-orbit" aria-hidden="true">
-          ${appleSvg()}
-          ${appleSvg()}
-          ${appleSvg()}
-        </div>
-      `;
-    }
-
-    return html;
-  }
-
-  function renderProfile(player) {
-    const card = $("#profileCard");
-    if (!card) return;
-
-    const titles = asArray(player.titles);
-    const effects = unique([
-      player.activeEffect,
-      ...asArray(player.unlockedEffects),
-      ...getTitleEffects(player)
-    ]);
-
-    card.className = "profile-card opened";
-    card.innerHTML = `
-      <div class="profile-top ${profileColorClass(player.color)}">
-        ${profileEffectMarkup(player)}
-        <div class="skin-frame">
-          <img class="profile-skin-img" src="https://mc-heads.net/avatar/${encodeURIComponent(player.mcid)}/128" alt="${esc(player.mcid)}">
-        </div>
-
-        <div class="profile-main">
-          <div class="profile-name-line">
-            <h2>${esc(player.mcid)}</h2>
-            <span class="points-badge">${Number(player.points || 0)}P</span>
-          </div>
-
-          <div class="title-row">
-            ${
-              titles.length
-                ? titles.map(function (title) {
-                    return `<span class="title-chip">${esc(title)}</span>`;
-                  }).join("")
-                : `<span class="title-chip">member</span>`
-            }
-          </div>
-
-          <p class="profile-bio">${esc(player.bio || "よろしくね。")}</p>
-        </div>
-      </div>
-
-      <div class="profile-body">
-        <div class="profile-stat">
-          <small>カラー</small>
-          <strong>${esc(player.color || "cream")}</strong>
-        </div>
-        <div class="profile-stat">
-          <small>曲</small>
-          <strong>${player.music ? esc(player.music) : "未設定"}</strong>
-        </div>
-        <div class="profile-stat">
-          <small>エフェクト</small>
-          <strong>${effects.length ? esc(effects.join(", ")) : "なし"}</strong>
-        </div>
-      </div>
-    `;
-  }
-
-  function renderProfileEditor(player) {
-    const editor = $("#profileEditor");
-    if (!editor || !player) return;
-
-    const effects = unique([
-      "",
-      player.activeEffect,
-      ...asArray(player.unlockedEffects),
-      ...getTitleEffects(player)
-    ]);
-
-    const songs = unique([
-      "",
-      player.music,
-      ...asArray(player.unlockedSongs)
-    ]);
-
-    const colorOptions = makeColorOptions(player);
-
-    editor.hidden = false;
-    editor.innerHTML = `
-      <h2>プロフィール編集</h2>
-      <p class="hint">身内専用なので、本人確認なしで編集できます。</p>
-
-      <div class="editor-grid">
-        <label>
-          一言コメント
-          <textarea id="editBio" maxlength="140">${esc(player.bio || "")}</textarea>
-        </label>
-
-        <label>
-          カラー
-          <select id="editColor">
-            ${colorOptions.map(function (item) {
-              return `<option value="${esc(item.value)}" ${item.value === player.color ? "selected" : ""} ${item.disabled ? "disabled" : ""}>${esc(item.label)}</option>`;
-            }).join("")}
-          </select>
-        </label>
-
-        <label>
-          エフェクト
-          <select id="editEffect">
-            ${effects.map(function (effect) {
-              return `<option value="${esc(effect)}" ${effect === player.activeEffect ? "selected" : ""}>${esc(effectLabel(effect))}</option>`;
-            }).join("")}
-          </select>
-        </label>
-
-        <label>
-          曲
-          <select id="editMusic">
-            ${songs.map(function (song) {
-              return `<option value="${esc(song)}" ${song === player.music ? "selected" : ""}>${esc(songLabel(song))}</option>`;
-            }).join("")}
-          </select>
-        </label>
-      </div>
-
-      <button id="saveProfileBtn" class="hub-button">保存する</button>
-    `;
-
-    $("#saveProfileBtn").addEventListener("click", function () {
-      saveProfileSettings(player.mcid);
-    });
-  }
-
-  function makeColorOptions(player) {
-    const all = [
-      { value: "cream", label: "クリーム" },
-      { value: "green", label: "森の緑" },
-      { value: "orange", label: "夕焼けオレンジ" },
-      { value: "blue", label: "月夜の青" },
-      { value: "purple", label: "コマンド紫" },
-      { value: "gold", label: "金リンゴゴールド" }
-    ];
-
-    const owned = new Set(["cream", "green", ...asArray(player.unlockedColors)]);
-    if (hasTitle(player, "Admin")) owned.add("purple");
-    if (hasTitle(player, "UHC KING")) owned.add("gold");
-    if (hasTitle(player, "Sword God")) owned.add("blue");
-    if (player.color) owned.add(player.color);
-
-    return all.map(function (item) {
-      return Object.assign({}, item, {
-        disabled: !owned.has(item.value)
-      });
-    });
-  }
-
-  async function saveProfileSettings(mcid) {
-    if (!isFirebaseReady()) {
-      toast("Firebase設定後に保存できます。", "error");
+    const found = await findPlayerDoc(mcid);
+    if (!found || !visibleAccount(found.player)) {
+      toast("その人はまだアカウントに追加されていません。", "error");
       return;
     }
 
-    const clean = normalizeMcid(mcid);
-    const bio = $("#editBio") ? $("#editBio").value.slice(0, 140) : "";
-    const color = $("#editColor") ? $("#editColor").value : "cream";
-    const effect = $("#editEffect") ? $("#editEffect").value : "";
-    const music = $("#editMusic") ? $("#editMusic").value : "";
+    const own = currentUser && lowerMcid(currentUser.mcid) === lowerMcid(found.player.mcid);
+    openProfileModal(found.player, own);
+  }
 
-    try {
-      await playersRef().doc(clean).set({
-        mcid: clean,
-        bio,
-        color,
-        activeEffect: effect,
-        music,
-        updatedAt: serverTimestamp()
-      }, { merge: true });
+  function setupProfileModal() {
+    document.addEventListener("click", function (event) {
+      if (event.target.matches("[data-close-profile-modal]")) closeProfileModal();
+      const modal = $("#profileModal");
+      if (modal && event.target === modal) closeProfileModal();
 
-      toast("プロフィールを保存しました。", "ok");
-      await loadProfile(clean, { skipOpening: true });
-    } catch (error) {
-      console.error(error);
-      toast("保存に失敗しました。", "error");
-    }
+      const open = event.target.closest("[data-open-profile]");
+      if (open) openPublicProfile(open.dataset.openProfile);
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") closeProfileModal();
+    });
+  }
+
+  function openProfileModal(player, own) {
+    const modal = $("#profileModal");
+    const content = $("#profileModalContent");
+    if (!modal || !content) return;
+
+    content.innerHTML = profileCardHTML(player, { own: Boolean(own) });
+    modal.hidden = false;
+    document.body.classList.add("modal-open");
+    spawnEquippedParticles(player, 45);
+  }
+
+  function closeProfileModal() {
+    const modal = $("#profileModal");
+    if (!modal) return;
+    modal.hidden = true;
+    document.body.classList.remove("modal-open");
   }
 
   function renderShop(player) {
     const container = $("#profileShop");
-    if (!container) return;
+    if (!container || !player) return;
 
-    if (!player) {
-      container.innerHTML = `
-        <article class="shop-card">
-          <h3>プロフィールを開いてね</h3>
-          <p>MCIDを開くと、Pointショップが使えます。</p>
-        </article>
-      `;
-      return;
-    }
 
-    container.innerHTML = SHOP_ITEMS.map(function (item) {
-      const owned = playerOwnsItem(player, item);
+    $$(".shop-tab").forEach(function (b) {
+      b.classList.toggle("is-active", b.dataset.shopFilter === shopFilter);
+    });
+
+    const items = window.RHItemLib.catalog.filter(function (item) {
+      return item.kind === shopFilter;
+    });
+
+    container.innerHTML = items.map(function (item) {
+      const owned = item.free || player.unlockedItems.includes(item.id);
+      const equipped = player.equipped[item.kind] === item.id;
       return `
         <article class="shop-card">
           <header>
-            <span class="shop-icon ${esc(item.kind)}"></span>
+            <span class="shop-icon" style="--item-color:${esc(item.color || "#6FA86B")}"></span>
             <div>
-              <h3>${esc(item.label)}</h3>
-              <span class="shop-price">${item.cost}P</span>
+              <span class="rarity-chip ${window.RHItemLib.rarityClass(item.rarity)}">${esc(item.rarity)}</span>
+              <h3>${esc(item.name)}</h3>
             </div>
           </header>
           <p>${esc(item.desc)}</p>
-          <button class="hub-button" data-buy="${esc(item.id)}">
-            ${owned ? "装備する" : "購入して装備"}
-          </button>
+          <span class="shop-price">${Number(item.cost || 0)}P</span>
+          <button class="hub-button" data-buy-item="${esc(item.id)}">${equipped ? "装備中" : owned ? "装備する" : "購入して装備"}</button>
         </article>
       `;
     }).join("");
-
-    container.onclick = function (event) {
-      const button = event.target.closest("[data-buy]");
-      if (!button) return;
-      buyItem(player.mcid, button.dataset.buy);
-    };
   }
 
-  function playerOwnsItem(player, item) {
-    if (item.kind === "effect") {
-      return asArray(player.unlockedEffects).includes(item.value) || getTitleEffects(player).includes(item.value);
-    }
-    if (item.kind === "song") {
-      return asArray(player.unlockedSongs).includes(item.value) || player.music === item.value;
-    }
-    if (item.kind === "color") {
-      return asArray(player.unlockedColors).includes(item.color) || player.color === item.color;
-    }
-    return false;
-  }
-
-  function equipUpdateForItem(item) {
-    if (item.kind === "effect") return { activeEffect: item.value };
-    if (item.kind === "song") return { music: item.value };
-    if (item.kind === "color") return { color: item.color };
-    return {};
-  }
-
-  async function buyItem(mcid, itemId) {
-    if (!isFirebaseReady()) {
-      toast("Firebase設定後に購入できます。", "error");
+  async function buyOrEquipItem(itemId) {
+    if (!currentUser) {
+      toast("ログインしてね。", "error");
       return;
     }
 
-    const item = SHOP_ITEMS.find(function (entry) {
-      return entry.id === itemId;
-    });
-
+    const item = window.RHItemLib.getItem(itemId);
     if (!item) return;
 
-    const clean = normalizeMcid(mcid);
+    const owned = item.free || currentUser.unlockedItems.includes(item.id);
 
     try {
-      let alreadyOwned = false;
+      if (owned) {
+        await playersRef().doc(currentUser.docId).set({
+          equipped: { [item.kind]: item.id },
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+        toast("装備しました。", "ok");
+        return;
+      }
 
       await db().runTransaction(async function (tx) {
-        const ref = playersRef().doc(clean);
+        const ref = playersRef().doc(currentUser.docId);
         const snap = await tx.get(ref);
-        const player = snap.exists
-          ? Object.assign({}, makeDefaultPlayer(clean), snap.data(), { mcid: clean })
-          : makeDefaultPlayer(clean);
+        const p = normalizePlayer(snap.id, snap.data());
+        if (p.points < item.cost) throw new Error("POINT_SHORT");
 
-        alreadyOwned = playerOwnsItem(player, item);
-
-        const update = Object.assign({
-          mcid: clean,
+        tx.set(ref, {
+          points: increment(-item.cost),
+          unlockedItems: arrayUnion(item.id),
+          equipped: { [item.kind]: item.id },
           updatedAt: serverTimestamp()
-        }, equipUpdateForItem(item));
-
-        if (alreadyOwned) {
-          tx.set(ref, update, { merge: true });
-          return;
-        }
-
-        const points = Number(player.points || 0);
-        if (points < item.cost) {
-          throw new Error("POINT_SHORT");
-        }
-
-        update.points = increment(-item.cost);
-
-        if (item.kind === "effect") {
-          update.unlockedEffects = arrayUnion(item.value);
-        }
-
-        if (item.kind === "song") {
-          update.unlockedSongs = arrayUnion(item.value);
-        }
-
-        if (item.kind === "color") {
-          update.unlockedColors = arrayUnion(item.color);
-        }
-
-        if (!snap.exists) {
-          update.createdAt = serverTimestamp();
-        }
-
-        tx.set(ref, update, { merge: true });
+        }, { merge: true });
       });
 
-      toast(alreadyOwned ? "装備しました。" : "購入して装備しました。", "ok");
-      await loadProfile(clean, { skipOpening: true });
+      toast("購入して装備しました。", "ok");
     } catch (error) {
-      if (error.message === "POINT_SHORT") {
-        toast("Pointが足りません。亀を探してみよう。", "error");
-      } else {
+      if (error.message === "POINT_SHORT") toast("Pointが足りません。", "error");
+      else {
         console.error(error);
         toast("購入に失敗しました。", "error");
       }
     }
   }
 
-  function effectLabel(effect) {
-    const labels = {
-      "": "なし",
-      leafConfetti: "木の葉クラッカー",
-      softStars: "控えめ星屑",
-      commandFrame: "コマンドブロック枠",
-      goldenAppleConfetti: "金リンゴクラッカー",
-      kingCrown: "王冠演出",
-      slashLight: "斬撃の光",
-      blueEnchantAura: "青エンチャントオーラ"
-    };
-    return labels[effect] || effect;
+  function renderGacha(player) {
+    renderGachaCollection(player);
+    renderFusionPanel(player);
   }
 
-  function songLabel(song) {
-    if (!song) return "曲なし";
-    const found = SHOP_ITEMS.find(function (item) {
-      return item.kind === "song" && item.value === song;
-    });
-    return found ? found.label : song;
-  }
+  function renderGachaCollection(player) {
+    const container = $("#gachaCollection");
+    if (!container) return;
 
-  function playProfileOpening(player) {
-    const card = $("#profileCard");
-    const skin = $(".profile-skin-img", card);
-    const effects = unique([
-      player.activeEffect,
-      ...asArray(player.unlockedEffects),
-      ...getTitleEffects(player)
-    ]);
-
-    makeConfetti({
-      gold: effects.includes("goldenAppleConfetti"),
-      apples: effects.includes("goldenAppleConfetti") || hasTitle(player, "UHC KING"),
-      leaves: effects.includes("leafConfetti")
-    });
-
-    makeXpOrbs(skin || card);
-
-    if (effects.includes("blueEnchantAura")) {
-      fullScreenSparkle("#5D8BB0", 22);
+    if (!player.ownedGachaItems.length) {
+      container.innerHTML = `<article class="gacha-card"><h3>まだ所持アイテムなし</h3><p>ガチャを回してみよう。</p></article>`;
+      return;
     }
+
+    container.innerHTML = player.ownedGachaItems.map(function (id) {
+      const item = window.RHItemLib.getGachaItem(id);
+      if (!item) return "";
+      return `
+        <article class="gacha-card">
+          <div class="gacha-art">${window.RHItemLib.renderGachaSvg(id)}</div>
+          <span class="rarity-chip ${window.RHItemLib.rarityClass(item.rarity)}">${esc(item.rarity)}</span>
+          <h3>${esc(item.name)}</h3>
+          <p>${esc(item.desc)}</p>
+          <button class="hub-button" data-equip-gacha="${esc(id)}">プロフィールに飾る</button>
+        </article>
+      `;
+    }).join("");
   }
 
-  async function playProfileMusic(player) {
-    const audio = $("#profileAudio");
-    if (!audio || !player.music) return;
+  function renderFusionPanel(player) {
+    const panel = $("#fusionPanel");
+    if (!panel) return;
+    const needs = window.RHItemLib.fusionItem.needs;
+    const hasAll = needs.every(function (id) { return player.ownedGachaItems.includes(id); });
+    const already = player.ownedGachaItems.includes("legend_dark_magma_penguin");
+
+    panel.innerHTML = `
+      <p class="eyebrow">Fusion</p>
+      <h2>融合</h2>
+      <p>闇のペンギン + 炎獄のマグマサーファーで伝説レア。</p>
+      <p>闇のペンギン: ${player.ownedGachaItems.includes("dark_penguin") ? "所持" : "未所持"}</p>
+      <p>炎獄のマグマサーファー: ${player.ownedGachaItems.includes("magma_surfer") ? "所持" : "未所持"}</p>
+      ${
+        already
+          ? `<p class="hint">融合済み。</p>`
+          : hasAll
+            ? `<button id="fusionBtn" class="hub-button">融合する</button>`
+            : `<p class="hint">素材がまだ足りません。</p>`
+      }
+    `;
+  }
+
+  function pickGachaItem() {
+    const items = window.RHItemLib.gachaItems.filter(function (item) {
+      return item.weight > 0;
+    });
+    const total = items.reduce(function (sum, item) { return sum + item.weight; }, 0);
+    let r = Math.random() * total;
+    for (const item of items) {
+      r -= item.weight;
+      if (r <= 0) return item;
+    }
+    return items[0];
+  }
+
+  async function rollGacha() {
+    if (!currentUser) {
+      toast("ログインしてから回してね。", "error");
+      return;
+    }
+
+    const cost = 30;
+    const item = pickGachaItem();
+    let duplicate = false;
 
     try {
-      let url = player.music;
+      await db().runTransaction(async function (tx) {
+        const ref = playersRef().doc(currentUser.docId);
+        const snap = await tx.get(ref);
+        const p = normalizePlayer(snap.id, snap.data());
+        if (p.points < cost) throw new Error("POINT_SHORT");
 
-      if (!/^https?:\/\//.test(url)) {
-        if (!isFirebaseReady()) return;
-        url = await storage().ref(player.music).getDownloadURL();
+        duplicate = p.ownedGachaItems.includes(item.id);
+        tx.set(ref, {
+          points: increment(duplicate ? -cost + 8 : -cost),
+          ownedGachaItems: arrayUnion(item.id),
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+      });
+
+      const result = $("#lastGachaResult");
+      if (result) {
+        result.innerHTML = `
+          <article class="gacha-card">
+            <div class="gacha-art">${item.svg()}</div>
+            <span class="rarity-chip ${window.RHItemLib.rarityClass(item.rarity)}">${esc(item.rarity)}</span>
+            <h3>${duplicate ? "かぶり: " : ""}${esc(item.name)}</h3>
+            <p>${duplicate ? "かぶりなので8P返却。" : esc(item.desc)}</p>
+          </article>
+        `;
       }
 
-      audio.src = url;
-      audio.volume = 0.46;
-      audio.currentTime = 0;
-
-      const result = audio.play();
-      if (result && typeof result.catch === "function") {
-        result.catch(function () {
-          showMusicUnlockButton(url);
-        });
-      }
+      spawnParticles(item.rarity === "SS" ? "#825BA0" : "#E08A4B", "star", 70);
     } catch (error) {
-      console.error(error);
-      toast("曲を再生できませんでした。Storageのパスを確認してね。", "error");
-    }
-  }
-
-  function showMusicUnlockButton(url) {
-    const card = $("#profileCard");
-    if (!card || $(".music-unlock", card)) return;
-
-    const button = document.createElement("button");
-    button.className = "hub-button music-unlock";
-    button.textContent = "曲を再生する";
-    button.addEventListener("click", function () {
-      const audio = $("#profileAudio");
-      if (!audio) return;
-      audio.src = url;
-      audio.volume = 0.46;
-      audio.play();
-      button.remove();
-    });
-
-    card.appendChild(button);
-  }
-
-  function makeConfetti(options) {
-    const layer = document.createElement("div");
-    layer.className = "particle-layer";
-    document.body.appendChild(layer);
-
-    const colors = options.gold
-      ? ["#E0AB4B", "#FFFDF7", "#E08A4B", "#cfa143"]
-      : ["#6FA86B", "#3E6B43", "#E08A4B", "#FFFDF7"];
-
-    const amount = options.apples ? 72 : 58;
-
-    for (let i = 0; i < amount; i++) {
-      const piece = document.createElement("span");
-      piece.className = options.leaves ? "leaf-piece" : "confetti-piece";
-      piece.style.left = Math.random() * 100 + "vw";
-      piece.style.background = colors[i % colors.length];
-      piece.style.setProperty("--dx", (Math.random() * 180 - 90) + "px");
-      piece.style.setProperty("--rot", (Math.random() * 720 - 360) + "deg");
-      piece.style.setProperty("--dur", (2.0 + Math.random() * 1.8) + "s");
-      piece.style.setProperty("--delay", (Math.random() * 0.25) + "s");
-      layer.appendChild(piece);
-    }
-
-    if (options.apples) {
-      for (let i = 0; i < 10; i++) {
-        const apple = document.createElement("span");
-        apple.className = "confetti-apple";
-        apple.innerHTML = appleSvg();
-        apple.style.left = Math.random() * 100 + "vw";
-        apple.style.setProperty("--dx", (Math.random() * 220 - 110) + "px");
-        apple.style.setProperty("--rot", (Math.random() * 680 - 340) + "deg");
-        apple.style.setProperty("--dur", (2.4 + Math.random() * 1.8) + "s");
-        apple.style.setProperty("--delay", (Math.random() * 0.35) + "s");
-        layer.appendChild(apple);
+      if (error.message === "POINT_SHORT") toast("30P必要です。", "error");
+      else {
+        console.error(error);
+        toast("ガチャに失敗しました。", "error");
       }
     }
-
-    window.setTimeout(function () {
-      layer.remove();
-    }, 4200);
   }
 
-  function makeXpOrbs(target) {
-    if (!target) return;
-    const rect = target.getBoundingClientRect();
-    const endX = rect.left + rect.width / 2;
-    const endY = rect.top + rect.height / 2;
+  async function equipGachaShowcase(id) {
+    if (!currentUser || !currentUser.ownedGachaItems.includes(id)) return;
+    await playersRef().doc(currentUser.docId).set({
+      equipped: { showcase: id },
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+    toast("展示アイテムを変更しました。", "ok");
+  }
 
-    for (let i = 0; i < 22; i++) {
-      const orb = document.createElement("span");
-      orb.className = "xp-orb";
-      const startX = Math.random() * window.innerWidth;
-      const startY = window.innerHeight + 30 + Math.random() * 120;
+  async function fuseLegendItem() {
+    if (!currentUser) return;
+    const needs = window.RHItemLib.fusionItem.needs;
+    if (!needs.every(function (id) { return currentUser.ownedGachaItems.includes(id); })) {
+      toast("素材が足りません。", "error");
+      return;
+    }
 
-      orb.style.left = startX + "px";
-      orb.style.top = startY + "px";
-      document.body.appendChild(orb);
+    await playersRef().doc(currentUser.docId).set({
+      ownedGachaItems: arrayUnion("legend_dark_magma_penguin"),
+      unlockedItems: arrayUnion("frame_legend"),
+      equipped: {
+        showcase: "legend_dark_magma_penguin",
+        frame: "frame_legend",
+        aura: "aura_legend",
+        background: "bg_dark",
+        particle: "particle_nether"
+      },
+      updatedAt: serverTimestamp()
+    }, { merge: true });
 
-      const duration = 700 + Math.random() * 900;
+    toast("伝説レアに融合しました！", "ok", 6000);
+    spawnParticles("#FF6600", "star", 120);
+  }
 
-      orb.animate([
-        { transform: "translate(0, 0) scale(0.8)", opacity: 0 },
-        { transform: "translate(0, -80px) scale(1)", opacity: 1, offset: 0.22 },
-        { transform: `translate(${endX - startX}px, ${endY - startY}px) scale(0.25)`, opacity: 0.15 }
-      ], {
-        duration,
-        easing: "cubic-bezier(.2,.7,.2,1)",
-        fill: "forwards"
-      });
+  function spawnEquippedParticles(player, amount) {
+    const item = window.RHItemLib.getItem((player.equipped || {}).particle) || window.RHItemLib.getItem("particle_leaf");
+    spawnParticles(item.color || "#6FA86B", item.shape || "dot", amount || 36);
+  }
 
-      window.setTimeout(function () {
-        orb.remove();
-      }, duration + 80);
+  function spawnParticles(color, shape, amount) {
+    for (let i = 0; i < amount; i++) {
+      const p = document.createElement("span");
+      p.className = `rh-particle shape-${shape || "dot"}`;
+      p.style.setProperty("--particle-color", color || "#6FA86B");
+      p.style.left = (window.innerWidth / 2 + Math.random() * 300 - 150) + "px";
+      p.style.top = (window.innerHeight / 2 + Math.random() * 170 - 85) + "px";
+      p.style.setProperty("--dx", (Math.random() * 420 - 210) + "px");
+      p.style.setProperty("--dy", (Math.random() * 300 - 220) + "px");
+      p.style.setProperty("--rot", (Math.random() * 720 - 360) + "deg");
+      p.style.setProperty("--dur", (0.9 + Math.random() * 1.1) + "s");
+      document.body.appendChild(p);
+      setTimeout(function () { p.remove(); }, 2300);
     }
   }
 
-  function setupCursorDust() {
-    document.addEventListener("pointermove", function (event) {
-      const now = Date.now();
-      if (now - cursorDustLast < 55) return;
-      cursorDustLast = now;
+  async function loadRecentProfiles(selector) {
+    const container = $(selector);
+    if (!container || !isFirebaseReady()) return;
 
-      if (event.pointerType && event.pointerType !== "mouse") return;
-      if (event.target.closest && event.target.closest(".admin-console")) return;
+    try {
+      const snap = await playersRef().orderBy("updatedAt", "desc").limit(12).get();
+      const players = snap.docs.map(function (doc) {
+        return normalizePlayer(doc.id, doc.data());
+      }).filter(visibleAccount);
 
-      const star = document.createElement("span");
-      star.className = "cursor-star";
-      star.style.left = event.clientX + "px";
-      star.style.top = event.clientY + "px";
-      document.body.appendChild(star);
+      renderProfileList(container, players);
+    } catch {
+      renderProfileList(container, []);
+    }
+  }
 
-      window.setTimeout(function () {
-        star.remove();
-      }, 760);
+  function renderProfileList(container, players) {
+    if (!players.length) {
+      container.innerHTML = `<article class="soft-card" style="padding:18px;">まだプロフィールがありません。</article>`;
+      return;
+    }
+
+    container.innerHTML = players.map(function (p) {
+      return `
+        <button class="player-card" data-open-profile="${esc(p.mcid)}">
+          <img src="https://mc-heads.net/avatar/${encodeURIComponent(p.mcid)}/96" alt="${esc(p.mcid)}">
+          <span><strong>${esc(p.mcid)}</strong><small>${esc(p.titles[0] || "member")}</small></span>
+        </button>
+      `;
+    }).join("");
+  }
+
+  function initHomePage() {
+    loadHomeNews();
+    loadRecentProfiles("#homeRecentProfiles");
+    loadHomeThreads();
+  }
+
+  async function loadHomeNews() {
+    const container = $("#homeNews");
+    if (!container) return;
+
+    try {
+      const snap = await newsRef().orderBy("createdAt", "desc").limit(3).get();
+      const items = snap.docs.map(function (doc) { return doc.data(); });
+      renderNewsCards(container, items.length ? items : FALLBACK_NEWS);
+    } catch {
+      renderNewsCards(container, FALLBACK_NEWS);
+    }
+  }
+
+  async function loadHomeThreads() {
+    const container = $("#homeChatThreads");
+    if (!container || !isFirebaseReady()) return;
+
+    try {
+      const snap = await threadsRef().orderBy("updatedAt", "desc").limit(4).get();
+      container.innerHTML = snap.docs.map(function (doc) {
+        const t = doc.data();
+        return `<article class="stack-item"><h3>${esc(t.title)}</h3><p>${esc(t.lastMessage || "まだメッセージなし")}</p><a class="hub-button secondary" href="./chat.html?thread=${doc.id}">開く</a></article>`;
+      }).join("") || `<article class="stack-item"><p>まだスレッドがありません。</p></article>`;
+    } catch {
+      container.innerHTML = `<article class="stack-item"><p>チャットを読み込めませんでした。</p></article>`;
+    }
+  }
+
+  function initNewsPage() {
+    renderAdminNewsPanel();
+    $("#addNewsBtn")?.addEventListener("click", addNews);
+    loadNewsList();
+  }
+
+  function renderAdminNewsPanel() {
+    const panel = $("#adminNewsPanel");
+    if (panel) panel.hidden = !isAdmin(currentUser);
+  }
+
+  async function addNews() {
+    if (!isAdmin(currentUser)) return;
+    const title = $("#newsTitleInput").value.trim();
+    const category = $("#newsCategoryInput").value.trim() || "news";
+    const body = $("#newsBodyInput").value.trim();
+    if (!title || !body) {
+      toast("タイトルと本文を入れてね。", "error");
+      return;
+    }
+
+    await newsRef().add({
+      title,
+      category,
+      body,
+      createdBy: currentUser.mcid,
+      createdAt: serverTimestamp()
+    });
+
+    $("#newsTitleInput").value = "";
+    $("#newsBodyInput").value = "";
+    toast("お知らせを追加しました。", "ok");
+    loadNewsList();
+  }
+
+  async function loadNewsList() {
+    const container = $("#newsList");
+    if (!container) return;
+    try {
+      const snap = await newsRef().orderBy("createdAt", "desc").limit(50).get();
+      const items = snap.docs.map(function (doc) { return doc.data(); });
+      renderNewsStack(container, items.length ? items : FALLBACK_NEWS);
+    } catch {
+      renderNewsStack(container, FALLBACK_NEWS);
+    }
+  }
+
+  function renderNewsCards(container, items) {
+    container.innerHTML = items.map(function (item) {
+      return `<article class="news-card"><span class="category-chip">${esc(item.category || "news")}</span><h3>${esc(item.title)}</h3><p>${esc(item.body)}</p></article>`;
+    }).join("");
+  }
+
+  function renderNewsStack(container, items) {
+    container.innerHTML = items.map(function (item) {
+      return `<article class="stack-item"><span class="category-chip">${esc(item.category || "news")}</span><h2>${esc(item.title)}</h2><p>${esc(item.body)}</p></article>`;
+    }).join("");
+  }
+
+  function initQuestPage() {
+    renderAdminQuestPanel();
+    $("#addQuestBtn")?.addEventListener("click", addQuest);
+    loadQuestList();
+  }
+
+  function renderAdminQuestPanel() {
+    const panel = $("#adminQuestPanel");
+    if (panel) panel.hidden = !isAdmin(currentUser);
+  }
+
+  async function addQuest() {
+    if (!isAdmin(currentUser)) return;
+    const title = $("#questTitleInput").value.trim();
+    const body = $("#questBodyInput").value.trim();
+    const reward = $("#questRewardInput").value.trim() || "?P";
+    const status = $("#questStatusInput").value.trim() || "quest";
+    if (!title || !body) {
+      toast("タイトルと説明を入れてね。", "error");
+      return;
+    }
+
+    await questsRef().add({
+      title,
+      body,
+      reward,
+      status,
+      createdBy: currentUser.mcid,
+      createdAt: serverTimestamp()
+    });
+
+    $("#questTitleInput").value = "";
+    $("#questBodyInput").value = "";
+    toast("クエストを追加しました。", "ok");
+    loadQuestList();
+  }
+
+  async function loadQuestList() {
+    const container = $("#questList");
+    if (!container) return;
+    try {
+      const snap = await questsRef().orderBy("createdAt", "desc").limit(50).get();
+      const items = snap.docs.map(function (doc) { return doc.data(); });
+      renderQuestCards(container, items.length ? items : FALLBACK_QUESTS);
+    } catch {
+      renderQuestCards(container, FALLBACK_QUESTS);
+    }
+  }
+
+  function renderQuestCards(container, items) {
+    container.innerHTML = items.map(function (item) {
+      return `<article class="quest-card"><span class="status-chip">${esc(item.status || "quest")}</span><h3>${esc(item.title)}</h3><p>${esc(item.body)}</p><div class="quest-meta"><span class="category-chip">Reward ${esc(item.reward || "?")}</span></div></article>`;
+    }).join("");
+  }
+
+  function initChatPage() {
+    renderChatAuth();
+    $("#createThreadBtn")?.addEventListener("click", createThread);
+    $("#sendMessageBtn")?.addEventListener("click", sendMessage);
+    $("#messageInput")?.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+
+    listenThreads();
+
+    const params = new URLSearchParams(location.search);
+    const thread = params.get("thread");
+    if (thread) setTimeout(function () { selectThread(thread); }, 900);
+  }
+
+  function renderChatAuth() {
+    const notice = $("#chatLoginNotice");
+    const create = $("#chatCreatePanel");
+    const input = $("#messageInputPanel");
+    if (notice) notice.hidden = Boolean(currentUser);
+    if (create) create.hidden = !currentUser;
+    if (input) input.hidden = !currentUser || !selectedThreadId;
+  }
+
+  function listenThreads() {
+    if (!isFirebaseReady()) return;
+    if (chatThreadUnsub) chatThreadUnsub();
+
+    chatThreadUnsub = threadsRef().orderBy("updatedAt", "desc").limit(50).onSnapshot(function (snap) {
+      const list = $("#threadList");
+      if (!list) return;
+
+      list.innerHTML = snap.docs.map(function (doc) {
+        const t = doc.data();
+        return `
+          <button class="thread-button ${doc.id === selectedThreadId ? "is-active" : ""}" data-thread-id="${doc.id}">
+            <strong>${esc(t.title)}</strong>
+            <small>${esc(t.lastMessage || "まだメッセージなし")}</small>
+          </button>
+        `;
+      }).join("") || `<p class="hint">まだスレッドがありません。</p>`;
+
+
+      $$("[data-thread-id]", list).forEach(function (button) {
+        button.addEventListener("click", function () {
+          selectThread(button.dataset.threadId);
+        });
+      });
     });
   }
 
-  function floatingScore(x, y, text) {
-    const item = document.createElement("span");
-    item.className = "floating-score";
-    item.textContent = text;
-    item.style.left = x + "px";
-    item.style.top = y + "px";
-    document.body.appendChild(item);
+  async function createThread() {
+    if (!currentUser) {
+      toast("ログインしてね。", "error");
+      return;
+    }
 
-    window.setTimeout(function () {
-      item.remove();
-    }, 1100);
+    const title = $("#threadTitleInput").value.trim();
+    const first = $("#threadFirstMessageInput").value.trim();
+
+    if (!title || !first) {
+      toast("タイトルと最初のメッセージを入れてね。", "error");
+      return;
+    }
+
+    const ref = await threadsRef().add({
+      title,
+      createdBy: currentUser.mcid,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      lastMessage: first
+    });
+
+    await ref.collection("messages").add({
+      mcid: currentUser.mcid,
+      mcidLower: lowerMcid(currentUser.mcid),
+      text: first,
+      createdAt: serverTimestamp()
+    });
+
+    $("#threadTitleInput").value = "";
+    $("#threadFirstMessageInput").value = "";
+    selectThread(ref.id);
   }
 
-  function breakElementIntoSvg(el, type) {
-    if (!el) return;
+  function selectThread(id) {
+    selectedThreadId = id;
+    renderChatAuth();
 
-    const rect = el.getBoundingClientRect();
-    const color = TURTLES[type] ? TURTLES[type].fragment : "#6FA86B";
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
+    if (chatMessageUnsub) chatMessageUnsub();
 
-    el.style.opacity = "0";
-    window.setTimeout(function () {
-      el.remove();
-    }, 40);
+    const header = $("#activeThreadHeader");
+    const messages = $("#messageList");
 
-    for (let i = 0; i < 16; i++) {
-      const frag = document.createElement("span");
-      frag.className = "svg-fragment";
-      frag.style.left = centerX + "px";
-      frag.style.top = centerY + "px";
-      frag.innerHTML = `
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M${4 + Math.random() * 5} ${3 + Math.random() * 5} L${19 - Math.random() * 4} ${5 + Math.random() * 5} L${16 - Math.random() * 5} ${20 - Math.random() * 5} L${5 + Math.random() * 4} ${17 - Math.random() * 5} Z"
-            fill="${color}" opacity="0.85"/>
-        </svg>
-      `;
-      document.body.appendChild(frag);
+    threadsRef().doc(id).get().then(function (snap) {
+      const t = snap.data();
+      if (header) header.innerHTML = `<h2>${esc(t.title)}</h2><p>created by ${esc(t.createdBy || "unknown")}</p>`;
+    });
 
-      const dx = Math.cos(i / 16 * Math.PI * 2) * (50 + Math.random() * 80);
-      const dy = Math.sin(i / 16 * Math.PI * 2) * (50 + Math.random() * 80);
-      const rot = Math.random() * 320 - 160;
+    chatMessageUnsub = threadsRef().doc(id).collection("messages").orderBy("createdAt", "asc").limit(200).onSnapshot(function (snap) {
+      if (!messages) return;
 
-      frag.animate([
-        { transform: "translate(-50%, -50%) scale(1) rotate(0deg)", opacity: 1 },
-        { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(0.3) rotate(${rot}deg)`, opacity: 0 }
-      ], {
-        duration: 780 + Math.random() * 320,
-        easing: "cubic-bezier(.2,.7,.2,1)",
-        fill: "forwards"
-      });
-
-      window.setTimeout(function () {
-        frag.remove();
-      }, 1200);
-    }
+      messages.innerHTML = snap.docs.map(function (doc) {
+        const m = doc.data();
+        return `
+          <div class="message">
+            <img src="https://mc-heads.net/avatar/${encodeURIComponent(m.mcid || "Steve")}/64" alt="">
+            <div class="message-bubble">
+              <strong>${esc(m.mcid || "unknown")}</strong>
+              <p>${esc(m.text || "")}</p>
+            </div>
+          </div>
+        `;
+      }).join("");
+      messages.scrollTop = messages.scrollHeight;
+    });
   }
 
-  function fullScreenSparkle(color, amount) {
-    for (let i = 0; i < amount; i++) {
-      const star = document.createElement("span");
-      star.className = "screen-sparkle";
-      star.style.left = Math.random() * 100 + "vw";
-      star.style.top = Math.random() * 100 + "vh";
-      star.style.background = color || "#FFFDF7";
-      star.style.animationDelay = Math.random() * 0.35 + "s";
-      document.body.appendChild(star);
+  async function sendMessage() {
+    if (!currentUser || !selectedThreadId) return;
+    const text = $("#messageInput").value.trim();
+    if (!text) return;
 
-      window.setTimeout(function () {
-        star.remove();
-      }, 1600);
-    }
+    $("#messageInput").value = "";
+
+    const ref = threadsRef().doc(selectedThreadId);
+    await ref.collection("messages").add({
+      mcid: currentUser.mcid,
+      mcidLower: lowerMcid(currentUser.mcid),
+      text: text.slice(0, 500),
+      createdAt: serverTimestamp()
+    });
+
+    await ref.set({
+      lastMessage: text.slice(0, 80),
+      updatedAt: serverTimestamp()
+    }, { merge: true });
   }
 
   function listenTurtles() {
     if (!isFirebaseReady()) return;
+    if (turtleUnsub) turtleUnsub();
 
     turtleUnsub = turtlesRef().where("page", "==", page).onSnapshot(function (snap) {
       const visible = new Set();
       let godVisible = false;
-      const localMcid = getLocalMcid();
 
-      snap.forEach(function (docSnap) {
-        const data = Object.assign({ id: docSnap.id }, docSnap.data());
+      snap.forEach(function (doc) {
+        const data = Object.assign({ id: doc.id }, doc.data());
         const meta = TURTLES[data.type] || TURTLES.normal;
         const claimed = asArray(data.claimedBy);
         const limit = Number(data.limit || meta.limit);
         const expired = data.expiresAtMs && Date.now() > Number(data.expiresAtMs);
         const full = claimed.length >= limit;
-        const already = localMcid && claimed.includes(localMcid);
+        const already = currentUser && claimed.includes(currentUser.mcid);
 
         if ((expired || full) && data.active) {
-          docSnap.ref.set({
-            active: false,
-            endedAt: serverTimestamp()
-          }, { merge: true }).catch(console.error);
+          doc.ref.set({ active: false, endedAt: serverTimestamp() }, { merge: true }).catch(console.error);
         }
 
         if (data.active && !expired && !full && !already) {
-          renderTurtle(docSnap.id, data);
-          visible.add(docSnap.id);
+          renderTurtle(doc.id, data);
+          visible.add(doc.id);
           if (data.type === "god") godVisible = true;
         } else {
-          removeTurtle(docSnap.id, !already && (expired || full || data.active === false));
+          removeTurtle(doc.id);
         }
       });
 
       Array.from(turtleEls.keys()).forEach(function (id) {
-        if (!visible.has(id)) {
-          removeTurtle(id, false);
-        }
+        if (!visible.has(id)) removeTurtle(id);
       });
 
-      setGodNavGlow(godVisible);
-    }, function (error) {
-      console.error(error);
-      toast("亀データの読み込みに失敗しました。", "error");
+      const nav = $(`.site-nav a[data-page="${page}"]`);
+      if (nav) nav.classList.toggle("god-glow", godVisible);
     });
   }
 
   function renderTurtle(id, data) {
     const meta = TURTLES[data.type] || TURTLES.normal;
     let el = turtleEls.get(id);
-
     if (!el) {
       el = document.createElement("img");
-      el.draggable = false;
-      el.alt = meta.label;
       document.body.appendChild(el);
       turtleEls.set(id, el);
     }
 
     el.src = meta.img;
-    el.dataset.turtleType = data.type;
-    el.className = `turtle-sprite turtle-${esc(data.type)}`;
-    el.style.left = clamp(Number(data.xPct) || 50, 3, 97) + "vw";
-    el.style.top = clamp(Number(data.yPct) || 50, 8, 92) + "vh";
-
+    el.className = `turtle-sprite turtle-${data.type}`;
+    el.style.left = Number(data.xPct || 50) + "vw";
+    el.style.top = Number(data.yPct || 50) + "vh";
     el.onclick = function (event) {
-      event.preventDefault();
       event.stopPropagation();
       claimTurtle(id);
     };
@@ -1387,153 +1294,59 @@
     if (data.type === "god") {
       el.onpointermove = function (event) {
         const rect = el.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        const fleeX = event.clientX < cx ? 42 : -42;
-        const fleeY = event.clientY < cy ? 34 : -34;
-        el.style.setProperty("--flee-x", `${fleeX + Math.random() * 16 - 8}px`);
-        el.style.setProperty("--flee-y", `${fleeY + Math.random() * 14 - 7}px`);
+        const fleeX = event.clientX < rect.left + rect.width / 2 ? 42 : -42;
+        const fleeY = event.clientY < rect.top + rect.height / 2 ? 34 : -34;
+        el.style.setProperty("--flee-x", fleeX + "px");
+        el.style.setProperty("--flee-y", fleeY + "px");
       };
-
-      el.onpointerleave = function () {
-        el.style.setProperty("--flee-x", "0px");
-        el.style.setProperty("--flee-y", "0px");
-      };
-    } else {
-      el.onpointermove = null;
-      el.onpointerleave = null;
     }
   }
 
-  function removeTurtle(id, burst) {
+  function removeTurtle(id) {
     const el = turtleEls.get(id);
     if (!el) return;
-
     turtleEls.delete(id);
-
-    if (burst) {
-      breakElementIntoSvg(el, el.dataset.turtleType || "normal");
-    } else {
-      el.remove();
-    }
-  }
-
-  function setGodNavGlow(on) {
-    const nav = $(`.site-nav a[data-page="${page}"]`);
-    if (nav) nav.classList.toggle("god-glow", Boolean(on));
-  }
-
-  async function requestMcidForPoint() {
-    let mcid = getLocalMcid();
-    if (!mcid) {
-      mcid = normalizeMcid(prompt("Pointを受け取るMCIDを入力してね"));
-      if (mcid) setLocalMcid(mcid);
-    }
-    return mcid;
+    el.remove();
   }
 
   async function claimTurtle(id) {
-    if (!isFirebaseReady()) {
-      toast("Firebase設定後に亀を取れます。", "error");
+    if (!currentUser) {
+      toast("Pointを受け取るにはログインしてね。", "error");
       return;
     }
 
-    const mcid = await requestMcidForPoint();
-    if (!mcid) return;
+    let result = null;
 
-    const el = turtleEls.get(id);
-    const rect = el ? el.getBoundingClientRect() : null;
-    const x = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
-    const y = rect ? rect.top + rect.height / 2 : window.innerHeight / 2;
+    await db().runTransaction(async function (tx) {
+      const tref = turtlesRef().doc(id);
+      const pref = playersRef().doc(currentUser.docId);
+      const tsnap = await tx.get(tref);
+      if (!tsnap.exists) return;
 
-    let result = { status: "unknown" };
+      const t = tsnap.data();
+      const meta = TURTLES[t.type] || TURTLES.normal;
+      const claimed = asArray(t.claimedBy);
+      const limit = Number(t.limit || meta.limit);
+      if (!t.active || claimed.includes(currentUser.mcid) || claimed.length >= limit) return;
 
-    try {
-      await db().runTransaction(async function (tx) {
-        const turtleRef = turtlesRef().doc(id);
-        const playerRef = playersRef().doc(mcid);
+      const next = claimed.concat(currentUser.mcid);
+      tx.set(tref, {
+        claimedBy: next,
+        active: next.length >= limit ? false : true,
+        updatedAt: serverTimestamp()
+      }, { merge: true });
 
-        const turtleSnap = await tx.get(turtleRef);
-        const playerSnap = await tx.get(playerRef);
+      tx.set(pref, {
+        points: increment(Number(t.points || meta.points)),
+        updatedAt: serverTimestamp()
+      }, { merge: true });
 
-        if (!turtleSnap.exists) {
-          result = { status: "gone" };
-          return;
-        }
+      result = { points: Number(t.points || meta.points), type: t.type };
+    });
 
-        const turtle = turtleSnap.data();
-        const meta = TURTLES[turtle.type] || TURTLES.normal;
-        const claimed = asArray(turtle.claimedBy);
-        const limit = Number(turtle.limit || meta.limit);
-        const pointValue = Number(turtle.points || meta.points);
-        const expired = turtle.expiresAtMs && Date.now() > Number(turtle.expiresAtMs);
-
-        if (!turtle.active || expired || claimed.length >= limit) {
-          tx.set(turtleRef, {
-            active: false,
-            endedAt: serverTimestamp()
-          }, { merge: true });
-          result = { status: "gone" };
-          return;
-        }
-
-        if (claimed.includes(mcid)) {
-          result = { status: "already" };
-          return;
-        }
-
-        const nextClaimed = claimed.concat(mcid);
-        const turtleUpdate = {
-          claimedBy: nextClaimed,
-          updatedAt: serverTimestamp()
-        };
-
-        if (nextClaimed.length >= limit) {
-          turtleUpdate.active = false;
-          turtleUpdate.endedAt = serverTimestamp();
-        }
-
-        tx.update(turtleRef, turtleUpdate);
-
-        if (playerSnap.exists) {
-          tx.set(playerRef, {
-            mcid,
-            points: increment(pointValue),
-            updatedAt: serverTimestamp()
-          }, { merge: true });
-        } else {
-          const player = makeDefaultPlayer(mcid);
-          tx.set(playerRef, Object.assign({}, player, {
-            points: pointValue,
-            createdAt: serverTimestamp(),
-            updatedAt: serverTimestamp()
-          }), { merge: true });
-        }
-
-        result = {
-          status: "claimed",
-          points: pointValue,
-          type: turtle.type
-        };
-      });
-
-      if (result.status === "claimed") {
-        floatingScore(x, y, `+${result.points}`);
-        removeTurtle(id, true);
-
-        if (result.type === "diamond" || result.type === "god") {
-          fullScreenSparkle(result.type === "diamond" ? "#5D8BB0" : "#E08A4B", 42);
-        }
-
-        toast(`${result.points}Pを手に入れました。`, "ok");
-      } else if (result.status === "already") {
-        toast("この亀はもう取っています。", "note");
-      } else {
-        toast("この亀はもう消えました。", "note");
-      }
-    } catch (error) {
-      console.error(error);
-      toast("亀を取れませんでした。もう一度試してね。", "error");
+    if (result) {
+      toast(`+${result.points}P`, "ok");
+      spawnParticles(result.type === "diamond" ? "#5D8BB0" : "#6FA86B", "star", 30);
     }
   }
 
@@ -1546,23 +1359,20 @@
 
     document.addEventListener("click", async function (event) {
       if (!pendingTurtleType && !pendingSwordOwner) return;
-      if (event.target.closest && event.target.closest(".admin-console")) return;
+      if (event.target.closest(".admin-console")) return;
 
       event.preventDefault();
       event.stopPropagation();
 
-      const xPct = clamp(event.clientX / window.innerWidth * 100, 3, 97);
-      const yPct = clamp(event.clientY / window.innerHeight * 100, 8, 92);
+      const xPct = event.clientX / window.innerWidth * 100;
+      const yPct = event.clientY / window.innerHeight * 100;
 
       if (pendingTurtleType) {
         const type = pendingTurtleType;
         pendingTurtleType = null;
         hidePlacementCursor();
         await saveTurtlePlacement(type, xPct, yPct);
-        return;
-      }
-
-      if (pendingSwordOwner) {
+      } else if (pendingSwordOwner) {
         const owner = pendingSwordOwner;
         pendingSwordOwner = null;
         hidePlacementCursor();
@@ -1573,7 +1383,6 @@
 
   function showPlacementCursor(html) {
     hidePlacementCursor();
-
     placementCursor = document.createElement("div");
     placementCursor.id = "placementCursor";
     placementCursor.innerHTML = html;
@@ -1582,39 +1391,24 @@
   }
 
   function hidePlacementCursor() {
-    if (placementCursor) {
-      placementCursor.remove();
-      placementCursor = null;
-    }
+    if (placementCursor) placementCursor.remove();
+    placementCursor = null;
     document.body.classList.remove("placement-mode");
   }
 
   function startTurtlePlacement(type) {
-    if (!isFirebaseReady()) {
-      toast("Firebase設定後に亀を設置できます。", "error");
-      return;
-    }
-
     const meta = TURTLES[type];
-    if (!meta) {
-      toast("亀タイプが違います。", "error");
-      return;
-    }
-
+    if (!meta) return;
     pendingTurtleType = type;
-    pendingSwordOwner = null;
-    showPlacementCursor(`<img src="${esc(meta.img)}" alt="">`);
+    showPlacementCursor(`<img src="${meta.img}" alt="">`);
     closeAdminConsole();
-    toast(`${meta.label}を置きたい場所でクリックしてね。`, "ok", 5200);
+    toast(`${meta.label}を置きたい場所でクリック。`, "ok", 5000);
   }
 
   async function saveTurtlePlacement(type, xPct, yPct) {
     const meta = TURTLES[type];
-    const ref = turtlesRef().doc();
     const now = Date.now();
-
-    await ref.set({
-      id: ref.id,
+    await turtlesRef().add({
       type,
       page,
       xPct,
@@ -1623,37 +1417,28 @@
       limit: meta.limit,
       claimedBy: [],
       active: true,
-      createdBy: getLocalMcid() || "admin",
       createdAt: serverTimestamp(),
       createdAtMs: now,
       expiresAtMs: type === "god" ? now + 60 * 60 * 1000 : null
     });
-
-    toast(`${meta.label}を設置しました。`, "ok");
   }
 
   function listenSwords() {
     if (!isFirebaseReady()) return;
+    if (swordUnsub) swordUnsub();
 
     swordUnsub = swordsRef().where("page", "==", page).onSnapshot(function (snap) {
       const visible = new Set();
 
-      snap.forEach(function (docSnap) {
-        const data = Object.assign({ id: docSnap.id }, docSnap.data());
+      snap.forEach(function (doc) {
+        const data = Object.assign({ id: doc.id }, doc.data());
         const expired = data.expiresAtMs && Date.now() > Number(data.expiresAtMs);
 
-        if (expired && data.active) {
-          docSnap.ref.set({
-            active: false,
-            endedAt: serverTimestamp()
-          }, { merge: true }).catch(console.error);
-        }
-
         if (data.active && !expired) {
-          renderSword(docSnap.id, data);
-          visible.add(docSnap.id);
+          renderSword(doc.id, data);
+          visible.add(doc.id);
         } else {
-          removeSword(docSnap.id);
+          removeSword(doc.id);
         }
       });
 
@@ -1665,7 +1450,6 @@
 
   function renderSword(id, data) {
     let button = swordEls.get(id);
-
     if (!button) {
       button = document.createElement("button");
       button.className = "diamond-sword";
@@ -1673,15 +1457,14 @@
       swordEls.set(id, button);
     }
 
-    button.style.left = clamp(Number(data.xPct) || 50, 3, 97) + "vw";
-    button.style.top = clamp(Number(data.yPct) || 50, 8, 92) + "vh";
-    button.innerHTML = `
-      ${diamondSwordSvg()}
-      <span class="sword-tooltip">${esc(data.owner || "4y44")}が設置!</span>
-    `;
+    button.style.left = Number(data.xPct || 50) + "vw";
+    button.style.top = Number(data.yPct || 50) + "vh";
+    button.innerHTML = `${diamondSwordSvg()}<span class="sword-tooltip">${esc(data.owner || "4y44")}が設置!</span>`;
+
     button.onclick = function (event) {
+      event.preventDefault();
       event.stopPropagation();
-      location.href = `./profile.html?mcid=${encodeURIComponent(data.owner || "4y44")}`;
+      openPublicProfile(data.owner || "4y44");
     };
   }
 
@@ -1692,109 +1475,57 @@
     el.remove();
   }
 
-  function setupSwordPowerButton() {
+  function setupSwordButton() {
     if ($("#swordPowerButton")) return;
-
     const button = document.createElement("button");
     button.id = "swordPowerButton";
     button.className = "hub-button floating-action";
     button.textContent = "ダイヤ剣を置く";
     button.hidden = true;
     document.body.appendChild(button);
-
-    button.addEventListener("click", startSwordPlacementForCurrentUser);
-    refreshSwordPowerButton();
+    button.onclick = startSwordPlacementForCurrentUser;
   }
 
-  async function refreshSwordPowerButton() {
+  function refreshSwordButton() {
     const button = $("#swordPowerButton");
-    if (!button || !isFirebaseReady()) return;
-
-    const mcid = getLocalMcid();
-    if (!mcid) {
-      button.hidden = true;
-      return;
-    }
-
-    try {
-      const allowed = await userCanPlaceSword(mcid);
-      button.hidden = !allowed;
-    } catch {
-      button.hidden = true;
-    }
-  }
-
-  async function userCanPlaceSword(mcid) {
-    if (mcid === "4y44") return true;
-
-    const snap = await playersRef().doc(mcid).get();
-    if (!snap.exists) return false;
-
-    return asArray(snap.data().titles).includes("PVP crown");
-  }
-
-  function todayKey() {
-    return new Intl.DateTimeFormat("sv-SE", {
-      timeZone: "Asia/Tokyo",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit"
-    }).format(new Date());
+    if (!button) return;
+    button.hidden = !(currentUser && currentUser.titles.includes("PVP crown"));
   }
 
   async function startSwordPlacementForCurrentUser() {
-    if (!isFirebaseReady()) return;
-
-    const mcid = getLocalMcid();
-    if (!mcid) {
-      toast("先にプロフィールでMCIDを設定してね。", "error");
-      return;
-    }
-
-    const allowed = await userCanPlaceSword(mcid);
-    if (!allowed) {
+    if (!currentUser || !currentUser.titles.includes("PVP crown")) {
       toast("PVP crownの人だけが剣を置けます。", "error");
       return;
     }
-
-    const snap = await swordsRef().where("owner", "==", mcid).get();
-    const today = todayKey();
-    const count = snap.docs.filter(function (doc) {
-      const data = doc.data();
-      return data.dayKey === today &&
-        data.active &&
-        (!data.expiresAtMs || Date.now() < Number(data.expiresAtMs));
-    }).length;
-
-    if (count >= 2) {
-      toast("今日はもう2個置きました。", "error");
-      return;
-    }
-
-    pendingSwordOwner = mcid;
-    pendingTurtleType = null;
+    pendingSwordOwner = currentUser.mcid;
     showPlacementCursor(diamondSwordSvg());
-    toast("剣を置きたい場所でクリックしてね。", "ok", 5200);
+    toast("剣を置きたい場所でクリック。", "ok", 5000);
   }
 
   async function saveSwordPlacement(owner, xPct, yPct) {
-    const ref = swordsRef().doc();
     const now = Date.now();
-
-    await ref.set({
-      id: ref.id,
+    await swordsRef().add({
       page,
       xPct,
       yPct,
       owner,
       active: true,
-      dayKey: todayKey(),
       createdAt: serverTimestamp(),
       createdAtMs: now,
       expiresAtMs: now + 24 * 60 * 60 * 1000
     });
+  }
 
-    toast("ダイヤ剣を設置しました。", "ok");
+  function diamondSwordSvg() {
+    return `
+      <svg viewBox="0 0 96 96">
+        <path d="M66 8 L82 14 L38 58 L28 48 Z" fill="#7fb7d6" stroke="#3A332B" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M56 18 L68 24 L32 60 L26 54 Z" fill="#c9edf7" opacity=".8"/>
+        <path d="M25 54 L42 71" stroke="#3A332B" stroke-width="8" stroke-linecap="round"/>
+        <path d="M18 63 L33 48" stroke="#E08A4B" stroke-width="9" stroke-linecap="round"/>
+        <path d="M13 76 L24 87 L38 73 L27 62 Z" fill="#6FA86B" stroke="#3A332B" stroke-width="4" stroke-linejoin="round"/>
+      </svg>
+    `;
   }
 
   function initAdminConsole() {
@@ -1802,7 +1533,6 @@
 
     document.addEventListener("keydown", function (event) {
       pressedKeys[event.key.toLowerCase()] = true;
-
       if (pressedKeys.c && pressedKeys.v && pressedKeys.b) {
         event.preventDefault();
         openAdminConsole();
@@ -1821,19 +1551,14 @@
     overlay.hidden = true;
     overlay.innerHTML = `
       <div class="terminal-window">
-        <button class="console-close" type="button">×</button>
-
+        <button class="console-close">×</button>
         <div class="login-panel">
           <h2>RETBARE ADMIN CONSOLE</h2>
           <p>password required</p>
-          <input id="adminPassword" type="password" autocomplete="off" placeholder="password">
+          <input id="adminPassword" type="password" placeholder="password">
           <button id="adminLoginBtn" class="hub-button">ENTER</button>
         </div>
-
-        <div class="access-panel" hidden>
-          <h2 id="accessText"></h2>
-        </div>
-
+        <div class="access-panel" hidden><h2 id="accessText"></h2></div>
         <div class="terminal-body" hidden>
           <div id="terminalOutput" class="terminal-output"></div>
           <div class="terminal-input-row">
@@ -1841,45 +1566,8 @@
             <input id="terminalInput" class="terminal-input" autocomplete="off">
           </div>
         </div>
-
-        <div id="titleGui" class="title-gui" hidden>
-          <h2>TITLE GRANT GUI</h2>
-          <div class="title-gui-grid">
-            <label>対象MCID<input id="titleTarget" placeholder="Retaru46"></label>
-            <label>タイトル名<input id="titleName" placeholder="Admin / UHC KING など"></label>
-            <label>
-              プロフィールカラー
-              <select id="titleColor">
-                <option value="cream">cream</option>
-                <option value="green">green</option>
-                <option value="orange">orange</option>
-                <option value="blue">blue</option>
-                <option value="purple">purple</option>
-                <option value="gold">gold</option>
-              </select>
-            </label>
-            <label>
-              付与エフェクト
-              <select id="titleEffect">
-                <option value="">なし</option>
-                <option value="commandFrame">commandFrame</option>
-                <option value="goldenAppleConfetti">goldenAppleConfetti</option>
-                <option value="kingCrown">kingCrown</option>
-                <option value="slashLight">slashLight</option>
-                <option value="blueEnchantAura">blueEnchantAura</option>
-                <option value="leafConfetti">leafConfetti</option>
-                <option value="softStars">softStars</option>
-              </select>
-            </label>
-          </div>
-          <div class="title-gui-actions">
-            <button id="grantTitleBtn" class="hub-button">付与する</button>
-            <button id="closeTitleGuiBtn" class="hub-button secondary">戻る</button>
-          </div>
-        </div>
       </div>
     `;
-
     document.body.appendChild(overlay);
 
     admin = {
@@ -1893,49 +1581,34 @@
       accessText: $("#accessText", overlay),
       body: $(".terminal-body", overlay),
       output: $("#terminalOutput", overlay),
-      input: $("#terminalInput", overlay),
-      titleGui: $("#titleGui", overlay)
+      input: $("#terminalInput", overlay)
     };
 
-    admin.closeButton.addEventListener("click", closeAdminConsole);
-    admin.loginButton.addEventListener("click", tryAdminLogin);
-
-    admin.password.addEventListener("keydown", function (event) {
+    admin.closeButton.onclick = closeAdminConsole;
+    admin.loginButton.onclick = tryAdminLogin;
+    admin.password.onkeydown = function (event) {
       if (event.key === "Enter") tryAdminLogin();
-    });
-
-    admin.input.addEventListener("keydown", function (event) {
+    };
+    admin.input.onkeydown = function (event) {
       if (event.key === "Enter") {
         const raw = admin.input.value;
         admin.input.value = "";
         handleAdminCommand(raw);
       }
-    });
-
-    $("#grantTitleBtn", overlay).addEventListener("click", grantTitleFromGui);
-    $("#closeTitleGuiBtn", overlay).addEventListener("click", function () {
-      admin.titleGui.hidden = true;
-      admin.body.hidden = false;
-      admin.input.focus();
-    });
+    };
   }
 
   function openAdminConsole() {
     admin.overlay.hidden = false;
-
     if (admin.authenticated) {
       showTerminal();
       return;
     }
-
     admin.login.hidden = false;
     admin.access.hidden = true;
     admin.body.hidden = true;
-    admin.titleGui.hidden = true;
     admin.password.value = "";
-    window.setTimeout(function () {
-      admin.password.focus();
-    }, 80);
+    setTimeout(function () { admin.password.focus(); }, 80);
   }
 
   function closeAdminConsole() {
@@ -1944,48 +1617,26 @@
 
   function tryAdminLogin() {
     if (admin.password.value !== "12345") {
-      admin.password.value = "";
       toast("PASSWORD DENIED", "error");
       return;
     }
-
     admin.authenticated = true;
     admin.login.hidden = true;
     admin.access.hidden = false;
-    admin.accessText.textContent = "";
-
-    typeWriter("ACCESS GRANTED", admin.accessText, function () {
-      window.setTimeout(showTerminal, 700);
-    });
-  }
-
-  function typeWriter(text, target, done) {
-    let index = 0;
-    const timer = window.setInterval(function () {
-      target.textContent += text[index];
-      index += 1;
-      if (index >= text.length) {
-        window.clearInterval(timer);
-        if (done) done();
-      }
-    }, 70);
+    admin.accessText.textContent = "ACCESS GRANTED";
+    setTimeout(showTerminal, 700);
   }
 
   function showTerminal() {
     admin.login.hidden = true;
     admin.access.hidden = true;
-    admin.titleGui.hidden = true;
     admin.body.hidden = false;
-
     if (!admin.output.dataset.ready) {
-      admin.output.dataset.ready = "true";
+      admin.output.dataset.ready = "1";
       writeTerminal("retbareHUB admin console ready.");
-      writeTerminal("type help for command list.");
+      writeTerminal("help / seed init / money add User 100 / came normal");
     }
-
-    window.setTimeout(function () {
-      admin.input.focus();
-    }, 60);
+    admin.input.focus();
   }
 
   function writeTerminal(text, className) {
@@ -1997,194 +1648,93 @@
   }
 
   async function handleAdminCommand(raw) {
-    const command = String(raw || "").trim();
-    if (!command) return;
+    const cmd = String(raw || "").trim();
+    if (!cmd) return;
+    writeTerminal(`retbare@hub:~$ ${cmd}`, "echo");
 
-    writeTerminal(`retbare@hub:~$ ${command}`, "echo");
-
-    const parts = command.split(/\s+/);
-    const main = parts[0];
+    const parts = cmd.split(/\s+/);
 
     try {
-      if (main === "help") {
-        writeTerminal("money add [User名 or me] [金額]");
-        writeTerminal("money take [User名 or me] [金額]");
-        writeTerminal("came [normal/gold/diamond/god]");
-        writeTerminal("title gui");
+      if (parts[0] === "help") {
         writeTerminal("seed init");
-        writeTerminal("clear");
+        writeTerminal("money add [User名] [金額]");
+        writeTerminal("money take [User名] [金額]");
+        writeTerminal("came [normal/gold/diamond/god]");
         return;
       }
 
-      if (main === "clear") {
-        admin.output.innerHTML = "";
+      if (parts[0] === "seed" && parts[1] === "init") {
+        await seedInitialData();
+        writeTerminal("seed completed.");
         return;
       }
 
-      if (main === "money") {
+      if (parts[0] === "money") {
         await adminMoney(parts[1], parts[2], parts[3]);
         return;
       }
 
-      if (main === "came") {
-        const type = parts[1];
-        if (!TURTLES[type]) {
-          writeTerminal("ERR: came normal/gold/diamond/god", "error");
-          return;
-        }
-        writeTerminal(`${TURTLES[type].label} placement mode.`);
-        startTurtlePlacement(type);
+      if (parts[0] === "came") {
+        startTurtlePlacement(parts[1]);
         return;
       }
 
-      if (main === "title" && parts[1] === "gui") {
-        admin.body.hidden = true;
-        admin.titleGui.hidden = false;
-        return;
-      }
-
-      if (main === "seed" && parts[1] === "init") {
-        await seedInitialData();
-        writeTerminal("initial data seeded.");
-        return;
-      }
-
-      writeTerminal("command not found. type help.", "error");
+      writeTerminal("command not found", "error");
     } catch (error) {
       console.error(error);
-      writeTerminal(`ERR: ${error.message}`, "error");
+      writeTerminal("ERR: " + error.message, "error");
     }
   }
 
-  async function adminMoney(action, target, amountText) {
-    if (!isFirebaseReady()) throw new Error("Firebase is not ready.");
-
-    if (action !== "add" && action !== "take") {
-      throw new Error("money add/take を使ってください。");
-    }
+  async function adminMoney(action, rawMcid, amountText) {
+    const found = await findPlayerDoc(rawMcid);
+    if (!found) throw new Error("account not found");
 
     const amount = Number(amountText);
-    if (!Number.isFinite(amount) || amount <= 0) {
-      throw new Error("金額が正しくありません。");
-    }
+    if (!Number.isFinite(amount)) throw new Error("invalid amount");
 
-    const targetMcid = target === "me" ? getLocalMcid() : normalizeMcid(target);
-    if (!targetMcid) {
-      throw new Error("対象MCIDがありません。");
-    }
-
-    const delta = action === "add" ? amount : -amount;
-
-    await playersRef().doc(targetMcid).set({
-      mcid: targetMcid,
-      points: increment(delta),
+    await found.ref.set({
+      points: increment(action === "take" ? -amount : amount),
       updatedAt: serverTimestamp()
     }, { merge: true });
 
-    writeTerminal(`${targetMcid}: ${delta > 0 ? "+" : ""}${delta}P`);
-    toast(`${targetMcid} のPointを変更しました。`, "ok");
-  }
-
-  async function grantTitleFromGui() {
-    if (!isFirebaseReady()) {
-      toast("Firebase設定後に使えます。", "error");
-      return;
-    }
-
-    const target = normalizeMcid($("#titleTarget").value);
-    const title = $("#titleName").value.trim();
-    const color = $("#titleColor").value;
-    const effect = $("#titleEffect").value;
-
-    if (!target || !title) {
-      toast("対象MCIDとタイトル名を入れてね。", "error");
-      return;
-    }
-
-    const update = {
-      mcid: target,
-      titles: arrayUnion(title),
-      color,
-      unlockedColors: arrayUnion(color),
-      updatedAt: serverTimestamp()
-    };
-
-    if (effect) {
-      update.activeEffect = effect;
-      update.unlockedEffects = arrayUnion(effect);
-    }
-
-    await playersRef().doc(target).set(update, { merge: true });
-
-    toast(`${target} に ${title} を付与しました。`, "ok");
-    writeTerminal(`title granted: ${target} -> ${title}`);
-    admin.titleGui.hidden = true;
-    admin.body.hidden = false;
-    admin.input.focus();
+    writeTerminal(`${found.player.mcid}: ${action === "take" ? "-" : "+"}${amount}P`);
   }
 
   async function seedInitialData() {
-    if (!isFirebaseReady()) {
-      toast("Firebase設定後に seed init できます。", "error");
-      return;
+    for (const mcid of Object.keys(INITIAL_PLAYERS)) {
+      const init = INITIAL_PLAYERS[mcid];
+      const hash = await passwordHash(mcid, "12345");
+      const found = await findPlayerDoc(mcid);
+      const ref = found ? found.ref : playersRef().doc(mcid);
+      const old = found ? found.player : null;
+
+      await ref.set({
+        mcid,
+        mcidLower: lowerMcid(mcid),
+        hasAccount: true,
+        passwordHash: old && old.passwordHash ? old.passwordHash : hash,
+        password: deleteField(),
+        points: old ? old.points : init.points,
+        bio: old && old.bio ? old.bio : init.bio,
+        color: init.color,
+        titles: unique((old ? old.titles : []).concat(init.titles)),
+        unlockedItems: unique((old ? old.unlockedItems : []).concat(init.unlockedItems)),
+        ownedGachaItems: unique((old ? old.ownedGachaItems : []).concat(init.ownedGachaItems)),
+        equipped: Object.assign({}, defaultEquipped(), init.equipped, old ? old.equipped : {}),
+        createdAt: old && old.createdAt ? old.createdAt : serverTimestamp(),
+        updatedAt: serverTimestamp()
+      }, { merge: true });
     }
 
-    const batch = db().batch();
+    for (const n of FALLBACK_NEWS) {
+      await newsRef().add(Object.assign({}, n, { createdAt: serverTimestamp() }));
+    }
 
-    Object.keys(INITIAL_PLAYERS).forEach(function (mcid) {
-      const data = makeDefaultPlayer(mcid);
-      batch.set(playersRef().doc(mcid), Object.assign({}, data, {
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
-      }), { merge: true });
-    });
+    for (const q of FALLBACK_QUESTS) {
+      await questsRef().add(Object.assign({}, q, { createdAt: serverTimestamp() }));
+    }
 
-    FALLBACK_NEWS.forEach(function (item, index) {
-      batch.set(newsRef().doc(`sample-${index + 1}`), Object.assign({}, item, {
-        createdAt: serverTimestamp()
-      }), { merge: true });
-    });
-
-    FALLBACK_QUESTS.forEach(function (item, index) {
-      batch.set(questsRef().doc(`sample-${index + 1}`), Object.assign({}, item, {
-        createdAt: serverTimestamp()
-      }), { merge: true });
-    });
-
-    await batch.commit();
-    toast("初期データをFirestoreに登録しました。", "ok", 5200);
-  }
-
-  function crownSvg() {
-    return `
-      <svg viewBox="0 0 96 96" aria-hidden="true">
-        <path d="M17 67 L24 30 L43 53 L51 24 L66 53 L80 30 L82 67 Z"
-          fill="#E0AB4B" stroke="#3A332B" stroke-width="4" stroke-linejoin="round"/>
-        <path d="M21 67 H78 V78 H21 Z" fill="#E08A4B" stroke="#3A332B" stroke-width="4" stroke-linejoin="round"/>
-      </svg>
-    `;
-  }
-
-  function appleSvg() {
-    return `
-      <svg viewBox="0 0 48 48" aria-hidden="true">
-        <path d="M25 13 C28 7 34 6 38 9 C34 10 30 13 28 17 Z" fill="#6FA86B"/>
-        <path d="M22 15 C14 10 7 16 7 26 C7 37 15 43 22 38 C27 43 40 38 41 26 C42 16 33 10 26 15 Z"
-          fill="#E0AB4B" stroke="#3A332B" stroke-width="3" stroke-linejoin="round"/>
-        <path d="M23 9 C24 12 24 14 24 17" stroke="#3A332B" stroke-width="3" stroke-linecap="round"/>
-      </svg>
-    `;
-  }
-
-  function diamondSwordSvg() {
-    return `
-      <svg viewBox="0 0 96 96" aria-hidden="true">
-        <path d="M66 8 L82 14 L38 58 L28 48 Z" fill="#7fb7d6" stroke="#3A332B" stroke-width="4" stroke-linejoin="round"/>
-        <path d="M56 18 L68 24 L32 60 L26 54 Z" fill="#c9edf7" opacity="0.8"/>
-        <path d="M25 54 L42 71" stroke="#3A332B" stroke-width="8" stroke-linecap="round"/>
-        <path d="M18 63 L33 48" stroke="#E08A4B" stroke-width="9" stroke-linecap="round"/>
-        <path d="M13 76 L24 87 L38 73 L27 62 Z" fill="#6FA86B" stroke="#3A332B" stroke-width="4" stroke-linejoin="round"/>
-      </svg>
-    `;
+    toast("初期データを登録しました。初期4人のパスワードは12345です。", "ok", 6000);
   }
 })();
