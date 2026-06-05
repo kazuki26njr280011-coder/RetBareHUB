@@ -3,43 +3,41 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>retbareHUB | お知らせ</title>
+  <title>retbareHUB | News</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css">
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css?v=7">
 </head>
 <body>
-  <div class="ambient-bg" aria-hidden="true"></div>
+  <div class="ambient-bg"></div>
 
   <header class="site-header">
-    <a class="brand" href="./index.html">
-      <span class="brand-cube">rH</span>
-      <span>
-        <strong>retbareHUB</strong>
-        <small>retbare fan site</small>
-      </span>
-    </a>
-
-    <nav class="site-nav" aria-label="メインナビ">
+    <a class="brand" href="./index.html"><span class="brand-cube">rH</span><span><strong>retbareHUB</strong><small>Survival & PVP Server</small></span></a>
+    <nav class="site-nav">
       <a href="./index.html" data-page="home">ホーム</a>
       <a href="./news.html" data-page="news">お知らせ</a>
       <a href="./quest.html" data-page="quest">クエスト</a>
       <a href="./profile.html" data-page="profile">プロフィール</a>
-      <a href="./rules.html" data-page="rules">ニュース/ルール</a>
+      <a href="./chat.html" data-page="chat">retbareChat</a>
+      <a href="./rules.html" data-page="rules">ルール</a>
     </nav>
-
-    <div class="header-status">
-      <span id="currentMcidPill">MCID未設定</span>
-      <span id="pointPill">0P</span>
-    </div>
+    <div class="header-status"><span id="currentMcidPill">未ログイン</span><span id="pointPill">0P</span></div>
   </header>
 
   <main class="page-shell">
     <section class="page-intro">
-      <p class="eyebrow">Retbare Notice Board</p>
+      <p class="eyebrow">Notice</p>
       <h1>お知らせ一覧</h1>
-      <p>サーバー内の出来事、イベント予定、サイト更新などをまとめます。</p>
+      <p>Retaru46でログインしている時だけ、お知らせを追加できます。</p>
+    </section>
+
+    <section id="adminNewsPanel" class="admin-write-panel soft-card" hidden>
+      <h2>お知らせを追加</h2>
+      <input id="newsTitleInput" type="text" placeholder="タイトル">
+      <input id="newsCategoryInput" type="text" placeholder="カテゴリ 例: site / event">
+      <textarea id="newsBodyInput" placeholder="本文"></textarea>
+      <button id="addNewsBtn" class="hub-button">追加する</button>
     </section>
 
     <section class="section-block">
@@ -47,15 +45,17 @@
     </section>
   </main>
 
-  <footer class="site-footer">
-    <span>retbareHUB</span>
-    <span>News archive</span>
-  </footer>
+  <footer class="site-footer"><span>retbareHUB</span><span>News archive</span></footer>
+
+  <div id="profileModal" class="profile-modal" hidden>
+    <button class="modal-close" data-close-profile-modal>×</button>
+    <div id="profileModalContent" class="profile-modal-content"></div>
+  </div>
 
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-storage-compat.js"></script>
-  <script src="./firebase.js"></script>
-  <script src="./app.js"></script>
+  <script src="./firebase.js?v=7"></script>
+  <script src="./items.js?v=7"></script>
+  <script src="./app.js?v=7"></script>
 </body>
 </html>
