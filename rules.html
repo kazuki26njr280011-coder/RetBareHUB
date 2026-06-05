@@ -3,76 +3,44 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>retbareHUB | ニュース/ルール</title>
+  <title>retbareHUB | Rules</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css?v=4">
+  <link rel="stylesheet" href="./style.css?v=7">
 </head>
 <body>
-  <div class="ambient-bg" aria-hidden="true"></div>
+  <div class="ambient-bg"></div>
 
   <header class="site-header">
-    <a class="brand" href="./index.html">
-      <span class="brand-cube">rH</span>
-      <span>
-        <strong>retbareHUB</strong>
-        <small>Survival & PVP Server</small>
-      </span>
-    </a>
-
+    <a class="brand" href="./index.html"><span class="brand-cube">rH</span><span><strong>retbareHUB</strong><small>Survival & PVP Server</small></span></a>
     <nav class="site-nav">
       <a href="./index.html" data-page="home">ホーム</a>
       <a href="./news.html" data-page="news">お知らせ</a>
       <a href="./quest.html" data-page="quest">クエスト</a>
       <a href="./profile.html" data-page="profile">プロフィール</a>
-      <a href="./rules.html" data-page="rules">ニュース/ルール</a>
+      <a href="./chat.html" data-page="chat">retbareChat</a>
+      <a href="./rules.html" data-page="rules">ルール</a>
     </nav>
-
-    <div class="header-status">
-      <span id="currentMcidPill">未ログイン</span>
-      <span id="pointPill">0P</span>
-    </div>
+    <div class="header-status"><span id="currentMcidPill">未ログイン</span><span id="pointPill">0P</span></div>
   </header>
 
   <main class="page-shell">
     <section class="page-intro">
       <p class="eyebrow">Rules and Turtle Area</p>
       <h1>ニュース/ルール</h1>
-      <p>ここにはAdminが亀を置けます。ログイン中のアカウントだけPointを受け取れます。</p>
+      <p>このページにはAdminが亀を設置できます。ログイン中のみPointを受け取れます。</p>
     </section>
 
     <section class="rule-grid">
-      <article class="soft-card rule-card">
-        <span class="rule-number">01</span>
-        <h2>みんなが気持ちよく遊べるように</h2>
-        <p>強い言葉を使いすぎず、困っている人がいたら声をかけよう。</p>
-      </article>
-
-      <article class="soft-card rule-card">
-        <span class="rule-number">02</span>
-        <h2>建築物は大切に</h2>
-        <p>他の人の建築、倉庫、土地は勝手に壊したり持ち出したりしないようにしよう。</p>
-      </article>
-
-      <article class="soft-card rule-card">
-        <span class="rule-number">03</span>
-        <h2>PVPは熱く、あと味はやさしく</h2>
-        <p>勝っても負けても、最後は「GG」で終われるように。</p>
-      </article>
-
-      <article class="soft-card rule-card turtle-note">
-        <span class="rule-number">亀</span>
-        <h2>亀を見つけたらクリック</h2>
-        <p>普通、黄金、ダイヤ、神の亀が出現します。神の亀がいるページはナビが光ります。</p>
-      </article>
+      <article class="soft-card rule-card"><span class="rule-number">01</span><h2>みんなが気持ちよく遊べるように</h2><p>強い言葉を使いすぎず、困っている人がいたら声をかけよう。</p></article>
+      <article class="soft-card rule-card"><span class="rule-number">02</span><h2>建築物は大切に</h2><p>他の人の建築、倉庫、土地は勝手に壊したり持ち出したりしないようにしよう。</p></article>
+      <article class="soft-card rule-card"><span class="rule-number">03</span><h2>PVPは熱く、あと味はやさしく</h2><p>勝っても負けても、最後はGGで終われるように。</p></article>
+      <article class="soft-card rule-card turtle-note"><span class="rule-number">亀</span><h2>亀を見つけたらクリック</h2><p>普通、黄金、ダイヤ、神の亀が出現します。神の亀がいるページはナビが光ります。</p></article>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <span>retbareHUB</span>
-    <span>Rules and turtles</span>
-  </footer>
+  <footer class="site-footer"><span>retbareHUB</span><span>Rules and turtles</span></footer>
 
   <div id="profileModal" class="profile-modal" hidden>
     <button class="modal-close" data-close-profile-modal>×</button>
@@ -81,8 +49,8 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-  <script src="./firebase.js?v=4"></script>
-  <script src="./items.js?v=4"></script>
-  <script src="./app.js?v=4"></script>
+  <script src="./firebase.js?v=7"></script>
+  <script src="./items.js?v=7"></script>
+  <script src="./app.js?v=7"></script>
 </body>
 </html>
