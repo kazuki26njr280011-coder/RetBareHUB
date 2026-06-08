@@ -1,5 +1,10 @@
+/* firebase.js
+   ここだけ、自分のFirebaseの「ウェブアプリ設定」に差し替えてね。
+   パスワードはconsole.logしない作りにしてあります。
+*/
 (function () {
   "use strict";
+
   const firebaseConfig = {
     apiKey: "AIzaSyBOyiUwwFROuDAXlJrNorbKs2GvE4SbVx8",
     authDomain: "retbarehub.firebaseapp.com",
@@ -8,26 +13,35 @@
     messagingSenderId: "794205547266",
     appId: "1:794205547266:web:12b716c131e6eb02d4701b"
   };
+
   window.RH = window.RH || {};
+
   function hasRealConfig(config) {
-    return config &&
+    return (
+      config &&
       config.apiKey &&
       !String(config.apiKey).startsWith("PASTE_") &&
       config.projectId &&
-      !String(config.projectId).startsWith("PASTE_");
+      !String(config.projectId).startsWith("PASTE_")
+    );
   }
+
   if (!window.firebase || !hasRealConfig(firebaseConfig)) {
     window.RH.firebaseReady = false;
-    console.warn("Firebase config が未設定です。");
+    console.warn("Firebase config が未設定 or firebase SDK が未読み込みです。");
     return;
   }
+
   try {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
-    window.RH.firebase = firebase;
-    window.RH.db = firebase.firestore();
-    window.RH.firebaseReady = true;
+
+    window.RH.firebase       = firebase;
+    window.RH.db             = firebase.firestore();
+    window.RH.storage        = firebase.storage();          // ← storage も RH に統合
+    window.RH.firebaseReady  = true;
+
     window.RH.serverTimestamp = function () {
       return firebase.firestore.FieldValue.serverTimestamp();
     };
@@ -43,6 +57,7 @@
     window.RH.deleteField = function () {
       return firebase.firestore.FieldValue.delete();
     };
+
   } catch (error) {
     window.RH.firebaseReady = false;
     console.error("Firebase初期化エラー:", error);
