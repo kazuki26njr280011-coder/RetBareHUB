@@ -1,56 +1,56 @@
 <!doctype html>
-<html lang="ja" data-page="rules">
+<html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>retbareHUB | Rules</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css?v=7">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rules | RetBareHUB</title>
+  <link rel="stylesheet" href="./style.css?v=20" />
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.5/firebase-storage-compat.js"></script>
+  <script defer src="./firebase.js?v=20"></script>
+  <script defer src="./items.js?v=20"></script>
+  <script defer src="./app.js?v=20"></script>
 </head>
-<body>
-  <div class="ambient-bg"></div>
+<body data-page="rules">
+  <div class="site-bg"><div class="bg-orb one"></div><div class="bg-orb two"></div><div class="bg-orb three"></div></div>
 
-  <header class="site-header">
-    <a class="brand" href="./index.html"><span class="brand-cube">rH</span><span><strong>retbareHUB</strong><small>Survival & PVP Server</small></span></a>
-    <nav class="site-nav">
-      <a href="./index.html" data-page="home">ホーム</a>
-      <a href="./news.html" data-page="news">お知らせ</a>
-      <a href="./quest.html" data-page="quest">クエスト</a>
-      <a href="./profile.html" data-page="profile">プロフィール</a>
-      <a href="./chat.html" data-page="chat">retbareChat</a>
-      <a href="./rules.html" data-page="rules">ルール</a>
+  <header class="topbar">
+    <a class="brand" href="./index.html"><span class="brand-mark">R</span><span>RetBareHUB<small>Rules</small></span></a>
+    <nav class="nav">
+      <a class="nav-link" href="./index.html">Home</a>
+      <a class="nav-link" href="./news.html">News</a>
+      <a class="nav-link" href="./quest.html">Quest</a>
+      <a class="nav-link" href="./profile.html">Profile</a>
+      <a class="nav-link" href="./chat.html">Chat</a>
+      <a class="nav-link active" href="./rules.html">Rules</a>
     </nav>
-    <div class="header-status"><span id="currentMcidPill">未ログイン</span><span id="pointPill">0P</span></div>
+    <div id="miniAccount" class="mini-account"></div>
   </header>
 
-  <main class="page-shell">
-    <section class="page-intro">
-      <p class="eyebrow">Rules and Turtle Area</p>
-      <h1>ニュース/ルール</h1>
-      <p>このページにはAdminが亀を設置できます。ログイン中のみPointを受け取れます。</p>
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <div class="kicker">Retbare Server Rules</div>
+        <h1>Rules</h1>
+        <p>サーバーIP: <strong>110.67.56.168:25565</strong></p>
+      </div>
     </section>
 
-    <section class="rule-grid">
-      <article class="soft-card rule-card"><span class="rule-number">01</span><h2>みんなが気持ちよく遊べるように</h2><p>強い言葉を使いすぎず、困っている人がいたら声をかけよう。</p></article>
-      <article class="soft-card rule-card"><span class="rule-number">02</span><h2>建築物は大切に</h2><p>他の人の建築、倉庫、土地は勝手に壊したり持ち出したりしないようにしよう。</p></article>
-      <article class="soft-card rule-card"><span class="rule-number">03</span><h2>PVPは熱く、あと味はやさしく</h2><p>勝っても負けても、最後はGGで終われるように。</p></article>
-      <article class="soft-card rule-card turtle-note"><span class="rule-number">亀</span><h2>亀を見つけたらクリック</h2><p>普通、黄金、ダイヤ、神の亀が出現します。神の亀がいるページはナビが光ります。</p></article>
+    <section class="panel">
+      <div class="panel-title"><div><h2>ルール</h2><p>みんなが楽しく遊ぶための決まり。</p></div></div>
+      <div class="rules-list">
+        <div class="rule-item"><div><h3>荒らし禁止</h3><p>建築破壊、アイテム盗み、嫌がらせは禁止。</p></div></div>
+        <div class="rule-item"><div><h3>チート禁止</h3><p>不正クライアント、Xray、オートクリックなどは禁止。</p></div></div>
+        <div class="rule-item"><div><h3>PVPはルール内で</h3><p>決められた場所や同意のあるPVPを楽しもう。</p></div></div>
+        <div class="rule-item"><div><h3>チャットはやさしく</h3><p>暴言、個人情報、しつこい連投はやめよう。</p></div></div>
+        <div class="rule-item"><div><h3>称号・titleコマンド保持</h3><p>Adminコンソールで <code>title gui</code> / <code>title grant MCID titleId</code> が使えます。</p></div></div>
+      </div>
     </section>
   </main>
 
-  <footer class="site-footer"><span>retbareHUB</span><span>Rules and turtles</span></footer>
-
-  <div id="profileModal" class="profile-modal" hidden>
-    <button class="modal-close" data-close-profile-modal>×</button>
-    <div id="profileModalContent" class="profile-modal-content"></div>
-  </div>
-
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-  <script src="./firebase.js?v=7"></script>
-  <script src="./items.js?v=7"></script>
-  <script src="./app.js?v=7"></script>
+  <div id="modalRoot" class="modal-root"></div>
+  <div id="toastRoot" class="toast-root"></div>
+  <div id="turtleRoot" class="turtle-root"></div>
 </body>
 </html>
