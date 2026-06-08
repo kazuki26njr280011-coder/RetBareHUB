@@ -3,8 +3,6 @@
    パスワードはconsole.logしない作りにしてあります。
 */
 (function () {
-  "use strict";
-
   const firebaseConfig = {
     apiKey: "AIzaSyBOyiUwwFROuDAXlJrNorbKs2GvE4SbVx8",
     authDomain: "retbarehub.firebaseapp.com",
@@ -13,53 +11,22 @@
     messagingSenderId: "794205547266",
     appId: "1:794205547266:web:12b716c131e6eb02d4701b"
   };
-
-  window.RH = window.RH || {};
-
-  function hasRealConfig(config) {
-    return (
-      config &&
-      config.apiKey &&
-      !String(config.apiKey).startsWith("PASTE_") &&
-      config.projectId &&
-      !String(config.projectId).startsWith("PASTE_")
-    );
-  }
-
-  if (!window.firebase || !hasRealConfig(firebaseConfig)) {
-    window.RH.firebaseReady = false;
-    console.warn("Firebase config が未設定 or firebase SDK が未読み込みです。");
+  const looksEmpty =
+    !firebaseConfig.apiKey ||
+    String(firebaseConfig.apiKey).includes("PASTE_") ||
+    String(firebaseConfig.projectId).includes("PASTE_");
+  if (looksEmpty) {
+    window.RH_FIREBASE_ERROR = "firebaseConfigがまだ入っていません";
     return;
   }
-
   try {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
-
-    window.RH.firebase       = firebase;
-    window.RH.db             = firebase.firestore();
-    window.RH.storage        = firebase.storage();          // ← storage も RH に統合
-    window.RH.firebaseReady  = true;
-
-    window.RH.serverTimestamp = function () {
-      return firebase.firestore.FieldValue.serverTimestamp();
-    };
-    window.RH.increment = function (value) {
-      return firebase.firestore.FieldValue.increment(value);
-    };
-    window.RH.arrayUnion = function (value) {
-      return firebase.firestore.FieldValue.arrayUnion(value);
-    };
-    window.RH.arrayRemove = function (value) {
-      return firebase.firestore.FieldValue.arrayRemove(value);
-    };
-    window.RH.deleteField = function () {
-      return firebase.firestore.FieldValue.delete();
-    };
-
+    window.db = firebase.firestore();
+    window.storage = firebase.storage();
+    window.RH_FIREBASE_READY = true;
   } catch (error) {
-    window.RH.firebaseReady = false;
-    console.error("Firebase初期化エラー:", error);
+    window.RH_FIREBASE_ERROR = error.message || "Firebase初期化エラー";
   }
 })();
