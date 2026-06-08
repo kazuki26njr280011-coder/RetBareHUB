@@ -1,62 +1,60 @@
 <!doctype html>
-<html lang="ja" data-page="quest">
+<html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>retbareHUB | Quest</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css?v=7">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quest | RetBareHUB</title>
+  <link rel="stylesheet" href="./style.css?v=20" />
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.5/firebase-storage-compat.js"></script>
+  <script defer src="./firebase.js?v=20"></script>
+  <script defer src="./items.js?v=20"></script>
+  <script defer src="./app.js?v=20"></script>
 </head>
-<body>
-  <div class="ambient-bg"></div>
+<body data-page="quest">
+  <div class="site-bg"><div class="bg-orb one"></div><div class="bg-orb two"></div><div class="bg-orb three"></div></div>
 
-  <header class="site-header">
-    <a class="brand" href="./index.html"><span class="brand-cube">rH</span><span><strong>retbareHUB</strong><small>Survival & PVP Server</small></span></a>
-    <nav class="site-nav">
-      <a href="./index.html" data-page="home">ホーム</a>
-      <a href="./news.html" data-page="news">お知らせ</a>
-      <a href="./quest.html" data-page="quest">クエスト</a>
-      <a href="./profile.html" data-page="profile">プロフィール</a>
-      <a href="./chat.html" data-page="chat">retbareChat</a>
-      <a href="./rules.html" data-page="rules">ルール</a>
+  <header class="topbar">
+    <a class="brand" href="./index.html"><span class="brand-mark">R</span><span>RetBareHUB<small>Quest</small></span></a>
+    <nav class="nav">
+      <a class="nav-link" href="./index.html">Home</a>
+      <a class="nav-link" href="./news.html">News</a>
+      <a class="nav-link active" href="./quest.html">Quest</a>
+      <a class="nav-link" href="./profile.html">Profile</a>
+      <a class="nav-link" href="./chat.html">Chat</a>
+      <a class="nav-link" href="./rules.html">Rules</a>
     </nav>
-    <div class="header-status"><span id="currentMcidPill">未ログイン</span><span id="pointPill">0P</span></div>
+    <div id="miniAccount" class="mini-account"></div>
   </header>
 
-  <main class="page-shell">
-    <section class="page-intro">
-      <p class="eyebrow">Quest Board</p>
-      <h1>クエスト一覧</h1>
-      <p>Retaru46でログインしている時だけ、クエストを追加できます。</p>
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <div class="kicker">Retbare Mission Board</div>
+        <h1>Quest</h1>
+        <p>クエストを達成してRetbareHubPointを集めよう。追加はretaru46専用。</p>
+      </div>
     </section>
 
-    <section id="adminQuestPanel" class="admin-write-panel soft-card" hidden>
-      <h2>クエストを追加</h2>
-      <input id="questTitleInput" type="text" placeholder="タイトル">
-      <input id="questRewardInput" type="text" placeholder="報酬 例: 10P">
-      <input id="questStatusInput" type="text" placeholder="種類 例: daily / pvp">
-      <textarea id="questBodyInput" placeholder="説明"></textarea>
-      <button id="addQuestBtn" class="hub-button">追加する</button>
+    <section id="questAdminPanel" class="panel" hidden>
+      <div class="panel-title"><div><h2>クエスト追加</h2><p>retaru46専用</p></div></div>
+      <form id="questForm" class="form">
+        <input id="questTitle" class="input" placeholder="クエスト名" />
+        <input id="questReward" class="input" type="number" placeholder="報酬ポイント" />
+        <textarea id="questBody" class="textarea" placeholder="説明"></textarea>
+        <button class="btn" type="submit">追加</button>
+      </form>
     </section>
 
-    <section class="section-block">
-      <div id="questList" class="quest-board"></div>
+    <section class="panel">
+      <div class="panel-title"><div><h2>クエスト一覧</h2><p>Firestoreから読み込み</p></div></div>
+      <div id="questList" class="quest-list"></div>
     </section>
   </main>
 
-  <footer class="site-footer"><span>retbareHUB</span><span>Quest board</span></footer>
-
-  <div id="profileModal" class="profile-modal" hidden>
-    <button class="modal-close" data-close-profile-modal>×</button>
-    <div id="profileModalContent" class="profile-modal-content"></div>
-  </div>
-
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-  <script src="./firebase.js?v=7"></script>
-  <script src="./items.js?v=7"></script>
-  <script src="./app.js?v=7"></script>
+  <div id="modalRoot" class="modal-root"></div>
+  <div id="toastRoot" class="toast-root"></div>
+  <div id="turtleRoot" class="turtle-root"></div>
 </body>
 </html>
